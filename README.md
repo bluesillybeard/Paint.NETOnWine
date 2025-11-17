@@ -49,4 +49,12 @@ Part 1:
 
 Once that is completed, the next step will be eliminating the need to copy UiAnimation.dll from a windows install so Paint.NET can work out-of-the-box.
 
+## Shoutouts
+
+This section is to give credit to those who are not listed as contributors on Github
+
+- Rick Brewster for creating Paint.NET to begin with
+- toe_head2001 for laying the groundwork for getting this project going
+- Several others on the Paint.NET forum for inspiring and motivating this project
+
 
