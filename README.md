@@ -53,8 +53,8 @@ Once that is completed, the next step will be eliminating the need to copy UiAni
 
 This section is to give credit to those who are not listed as contributors on Github
 
-- Rick Brewster for creating Paint.NET to begin with
-- toe_head2001 for laying the groundwork for getting this project going
+- Rick Brewster for creating Paint.NET to begin with and encouraging this project
+- toe_head2001 for laying the groundwork for getting this project started
 - Several others on the Paint.NET forum for inspiring and motivating this project
 
 
