@@ -2,7 +2,7 @@
 
 This is a temporary project for getting Paint.NET to work under WINE.
 
-The original repository can be found [here](https://gitlab.winehq.org/wine/wine)
+See the discussions on the Paint.NET forums [here](https://forums.getpaint.net/topic/134148-getting-the-latest-pdn-version-working-on-linux-wine-work-in-progress/)
 
 This contains a set of patches to be applied to upstream WINE. These changes are experimental and are published for other developers to contribute / learn from.
 
