@@ -1,0 +1,13 @@
+diff --git a/dlls/user32/user32.spec b/dlls/user32/user32.spec
+index 0645792a312..be6e1e6e4e9 100644
+--- a/dlls/user32/user32.spec
++++ b/dlls/user32/user32.spec
+@@ -1108,7 +1108,7 @@
+ # @ stub SetWindowCompositionTransition
+ @ stdcall SetWindowContextHelpId(long long) NtUserSetWindowContextHelpId
+ @ stdcall SetWindowDisplayAffinity(long long)
+-# @ stub SetWindowFeedbackSetting
++@ stdcall SetWindowFeedbackSetting(long long long long ptr)
+ @ stdcall SetWindowLongA(long long long)
+ @ stdcall -arch=win64 SetWindowLongPtrA(long long long)
+ @ stdcall -arch=win64 SetWindowLongPtrW(long long long)
