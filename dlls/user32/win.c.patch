@@ -1,0 +1,21 @@
+diff --git a/dlls/user32/win.c b/dlls/user32/win.c
+index cef0beeacda..57cdc666b54 100644
+--- a/dlls/user32/win.c
++++ b/dlls/user32/win.c
+@@ -1621,6 +1621,16 @@ BOOL WINAPI SetWindowDisplayAffinity(HWND hwnd, DWORD affinity)
+     return FALSE;
+ }
+ 
++/**********************************************************************
++ *              SetWindowFeedbackSetting (USER32.@)
++ */
++BOOL WINAPI SetWindowFeedbackSetting(HWND hwnd, FEEDBACK_TYPE feedback, DWORD dwFlags, UINT size, const void* configuration)
++{
++    FIXME("(%p, %u, %lu, %u, %p): stub\n", hwnd, feedback, dwFlags, size, configuration);
++    SetLastError(ERROR_CALL_NOT_IMPLEMENTED);
++    return FALSE;
++}
++
+ /**********************************************************************
+  *              SetWindowCompositionAttribute (USER32.@)
+  */
