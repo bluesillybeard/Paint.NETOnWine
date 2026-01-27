@@ -1,3 +1,5 @@
+diff --git a/dlls/d2d1/device.c b/dlls/d2d1/device.c
+index 3969046d5b3..31b28f6d747 100644
 --- a/dlls/d2d1/device.c
 +++ b/dlls/d2d1/device.c
 @@ -1799,7 +1799,7 @@ static HRESULT STDMETHODCALLTYPE d2d_device_context_Flush(ID2D1DeviceContext6 *i
@@ -9,4 +11,18 @@
  }
  
  static void STDMETHODCALLTYPE d2d_device_context_SaveDrawingState(ID2D1DeviceContext6 *iface,
-
+@@ -2392,8 +2392,13 @@ static HRESULT STDMETHODCALLTYPE d2d_device_context_GetImageLocalBounds(ID2D1Dev
+     else
+     {
+         FIXME("Unable to get local bounds of image %p.\n", image);
++        // This is bad but better than undefined
++        local_bounds->left = 0.0f;
++        local_bounds->top  = 0.0f;
++        local_bounds->right  = 0.0f;
++        local_bounds->bottom = 0.0f;
+ 
+-        return E_NOTIMPL;
++        return S_OK;
+     }
+ }
+ 
