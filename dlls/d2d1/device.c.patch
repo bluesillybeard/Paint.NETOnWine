@@ -28,7 +28,7 @@ index 3969046d5b3..8a195cbc189 100644
      }
 -    else
 +    else if (SUCCEEDED(ID2D1Image_QueryInterface(image, &IID_ID2D1Effect, (void **)&effect))) {
-+        FIXME("Effect get local bound is verrrry badly implemented");
++        FIXME("Effect get local bound is verrrry badly implemented\n");
 +        // This is bad but better than undefined
 +        local_bounds->left = 0.0f;
 +        local_bounds->top  = 0.0f;
