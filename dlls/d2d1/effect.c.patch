@@ -1,0 +1,17 @@
+diff --git a/dlls/d2d1/effect.c b/dlls/d2d1/effect.c
+index b66fe731523..e6777e2ddc1 100644
+--- a/dlls/d2d1/effect.c
++++ b/dlls/d2d1/effect.c
+@@ -2619,7 +2619,11 @@ static void d2d_effect_cleanup(struct d2d_effect *effect)
+             ID2D1Image_Release(effect->inputs[i]);
+     }
+     free(effect->inputs);
+-    ID2D1EffectContext_Release(&effect->effect_context->ID2D1EffectContext_iface);
++
++    // To test the System.AccessViolationException simply use square selection tool
++    FIXME("There is System.AccessViolationException calling this at the time of writting");
++    //ID2D1EffectContext_Release(&effect->effect_context->ID2D1EffectContext_iface);
++
+     if (effect->graph)
+         ID2D1TransformGraph_Release(&effect->graph->ID2D1TransformGraph_iface);
+     d2d_effect_properties_cleanup(&effect->properties);
