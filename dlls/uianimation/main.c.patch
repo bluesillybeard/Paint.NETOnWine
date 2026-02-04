@@ -1,5 +1,5 @@
 diff --git a/dlls/uianimation/main.c b/dlls/uianimation/main.c
-index 22bb58ddbe2..8f2b1ffa316 100644
+index 22bb58ddbe2..f5fe24f4f38 100644
 --- a/dlls/uianimation/main.c
 +++ b/dlls/uianimation/main.c
 @@ -27,6 +27,8 @@
@@ -11,23 +11,7 @@ index 22bb58ddbe2..8f2b1ffa316 100644
  
  #include "initguid.h"
  #include "uianimation.h"
-@@ -229,42 +231,42 @@ static HRESULT WINAPI animation_storyboard_Conclude (IUIAnimationStoryboard *ifa
- {
-     struct animation_storyboard *This = impl_from_IUIAnimationStoryboard( iface );
-     FIXME( "stub (%p)->(  )\n", This );
--    return E_NOTIMPL;
-+    return S_OK;
- }
- 
- static HRESULT WINAPI animation_storyboard_Finish (IUIAnimationStoryboard *iface,  UI_ANIMATION_SECONDS deadline)
- {
-     struct animation_storyboard *This = impl_from_IUIAnimationStoryboard( iface );
-     FIXME( "stub (%p)->(  )\n", This );
--    return E_NOTIMPL;
-+    return S_OK;
- }
- 
- static HRESULT WINAPI animation_storyboard_Abandon (IUIAnimationStoryboard *iface)
+@@ -243,7 +245,7 @@ static HRESULT WINAPI animation_storyboard_Abandon (IUIAnimationStoryboard *ifac
  {
      struct animation_storyboard *This = impl_from_IUIAnimationStoryboard( iface );
      FIXME( "stub (%p)->(  )\n", This );
@@ -36,30 +20,6 @@ index 22bb58ddbe2..8f2b1ffa316 100644
  }
  
  static HRESULT WINAPI animation_storyboard_SetTag(IUIAnimationStoryboard *iface, IUnknown *object, UINT32 id)
- {
-     struct animation_storyboard *This = impl_from_IUIAnimationStoryboard( iface );
-     FIXME( "stub (%p)->(  )\n", This );
--    return E_NOTIMPL;
-+    return S_OK;
- }
- 
- static HRESULT WINAPI animation_storyboard_GetTag (IUIAnimationStoryboard *iface, IUnknown **object, UINT32 *id)
- {
-     struct animation_storyboard *This = impl_from_IUIAnimationStoryboard( iface );
-     FIXME( "stub (%p)->(  )\n", This );
--    return E_NOTIMPL;
-+    return S_OK;
- }
- 
- static HRESULT WINAPI animation_storyboard_GetStatus (IUIAnimationStoryboard *iface, UI_ANIMATION_STORYBOARD_STATUS *status)
- {
-     struct animation_storyboard *This = impl_from_IUIAnimationStoryboard( iface );
-     FIXME( "stub (%p)->(  )\n", This );
--    return E_NOTIMPL;
-+    return S_OK;
- }
- 
- static HRESULT WINAPI animation_storyboard_GetElapsedTime (IUIAnimationStoryboard *iface,  UI_ANIMATION_SECONDS *elapsed)
 @@ -325,7 +327,15 @@ struct animation_var
  {
      IUIAnimationVariable IUIAnimationVariable_iface;
@@ -166,23 +126,6 @@ index 22bb58ddbe2..8f2b1ffa316 100644
  }
  
  static HRESULT WINAPI animation_var_SetRoundingMode ( IUIAnimationVariable *iface,UI_ANIMATION_ROUNDING_MODE mode)
-@@ -449,14 +468,14 @@ static HRESULT WINAPI animation_var_SetTag ( IUIAnimationVariable *iface, IUnkno
- {
-     struct animation_var *This = impl_from_IUIAnimationVariable( iface );
-     FIXME( "stub (%p)->(  )\n", This );
--    return E_NOTIMPL;
-+    return S_OK;
- }
- 
- static HRESULT WINAPI animation_var_GetTag ( IUIAnimationVariable *iface, IUnknown **object, UINT32 *id)
- {
-     struct animation_var *This = impl_from_IUIAnimationVariable( iface );
-     FIXME( "stub (%p)->(  )\n", This );
--    return E_NOTIMPL;
-+    return S_OK;
- }
- 
- static HRESULT WINAPI animation_var_SetVariableChangeHandler ( IUIAnimationVariable *iface, IUIAnimationVariableChangeHandler *handler)
 @@ -502,13 +521,43 @@ static HRESULT animation_var_create(DOUBLE initial, IUIAnimationVariable **obj )
      if (!This) return E_OUTOFMEMORY;
      This->IUIAnimationVariable_iface.lpVtbl = &animation_var_vtbl;
