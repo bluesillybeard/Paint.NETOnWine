@@ -1,5 +1,5 @@
 diff --git a/dlls/uianimation/main.c b/dlls/uianimation/main.c
-index 22bb58ddbe2..c436e2cb136 100644
+index 22bb58ddbe2..8c6c9ab23bb 100644
 --- a/dlls/uianimation/main.c
 +++ b/dlls/uianimation/main.c
 @@ -27,6 +27,8 @@
@@ -338,7 +338,27 @@ index 22bb58ddbe2..c436e2cb136 100644
  };
  
  struct manager *impl_from_IUIAnimationManager( IUIAnimationManager *iface )
-@@ -604,7 +714,12 @@ static HRESULT WINAPI manager_AbandonAllStoryboards( IUIAnimationManager *iface
+@@ -576,8 +686,17 @@ static HRESULT WINAPI manager_CreateAnimationVariable( IUIAnimationManager *ifac
+ static HRESULT WINAPI manager_ScheduleTransition( IUIAnimationManager *iface, IUIAnimationVariable *variable, IUIAnimationTransition *transition, UI_ANIMATION_SECONDS current_time )
+ {
+     struct manager *This = impl_from_IUIAnimationManager( iface );
+-    FIXME( "stub (%p)->(%p, %p)\n", This, variable, transition );
+-    return E_NOTIMPL;
++    IUIAnimationStoryboard* storyboard = NULL;
++    HRESULT hr = 0;
++    UI_ANIMATION_SCHEDULING_RESULT schedresult;
++    FIXME( "partial stub (%p)->(%p, %p)\n", This, variable, transition );
++    hr = animation_storyboard_create(&storyboard);
++    if(hr)
++        return hr;
++    hr = animation_storyboard_AddTransition(storyboard, variable, transition);
++    if(hr)
++        return hr;
++    return animation_storyboard_Schedule(storyboard, current_time, &schedresult);
+ }
+ 
+ static HRESULT WINAPI manager_CreateStoryboard( IUIAnimationManager *iface, IUIAnimationStoryboard **storyboard )
+@@ -604,7 +723,12 @@ static HRESULT WINAPI manager_AbandonAllStoryboards( IUIAnimationManager *iface
  static HRESULT WINAPI manager_Update( IUIAnimationManager *iface, UI_ANIMATION_SECONDS cur_time, UI_ANIMATION_UPDATE_RESULT *update_result )
  {
      struct manager *This = impl_from_IUIAnimationManager( iface );
@@ -352,7 +372,7 @@ index 22bb58ddbe2..c436e2cb136 100644
      if (update_result)
          *update_result = UI_ANIMATION_UPDATE_VARIABLES_CHANGED;
      return S_OK;
-@@ -627,15 +742,34 @@ static HRESULT WINAPI manager_GetStoryboardFromTag( IUIAnimationManager *iface,
+@@ -627,15 +751,34 @@ static HRESULT WINAPI manager_GetStoryboardFromTag( IUIAnimationManager *iface,
  static HRESULT WINAPI manager_GetStatus( IUIAnimationManager *iface, UI_ANIMATION_MANAGER_STATUS *status )
  {
      struct manager *This = impl_from_IUIAnimationManager( iface );
@@ -390,7 +410,7 @@ index 22bb58ddbe2..c436e2cb136 100644
  }
  
  static HRESULT WINAPI manager_Pause( IUIAnimationManager *iface )
-@@ -735,6 +869,7 @@ static HRESULT manager_create( IUnknown *outer, REFIID iid, void **obj )
+@@ -735,6 +878,7 @@ static HRESULT manager_create( IUnknown *outer, REFIID iid, void **obj )
      if (!This) return E_OUTOFMEMORY;
      This->IUIAnimationManager_iface.lpVtbl = &manager_vtbl;
      This->ref = 1;
@@ -398,7 +418,7 @@ index 22bb58ddbe2..c436e2cb136 100644
  
      hr = IUIAnimationManager_QueryInterface( &This->IUIAnimationManager_iface, iid, obj );
  
-@@ -749,6 +884,9 @@ struct timer
+@@ -749,6 +893,9 @@ struct timer
  {
      IUIAnimationTimer IUIAnimationTimer_iface;
      LONG ref;
@@ -408,7 +428,7 @@ index 22bb58ddbe2..c436e2cb136 100644
  };
  
  struct timer *impl_from_IUIAnimationTimer( IUIAnimationTimer *iface )
-@@ -817,28 +955,40 @@ static HRESULT WINAPI timer_SetTimerUpdateHandler (IUIAnimationTimer *iface,
+@@ -817,28 +964,40 @@ static HRESULT WINAPI timer_SetTimerUpdateHandler (IUIAnimationTimer *iface,
  static HRESULT WINAPI timer_Enable (IUIAnimationTimer *iface)
  {
      struct timer *This = impl_from_IUIAnimationTimer( iface );
@@ -454,7 +474,7 @@ index 22bb58ddbe2..c436e2cb136 100644
      return S_OK;
  }
  
-@@ -872,6 +1022,8 @@ static HRESULT timer_create( IUnknown *outer, REFIID iid, void **obj )
+@@ -872,6 +1031,8 @@ static HRESULT timer_create( IUnknown *outer, REFIID iid, void **obj )
          return E_OUTOFMEMORY;
      This->IUIAnimationTimer_iface.lpVtbl = &timer_vtbl;
      This->ref = 1;
@@ -463,7 +483,7 @@ index 22bb58ddbe2..c436e2cb136 100644
  
      hr = IUIAnimationTimer_QueryInterface( &This->IUIAnimationTimer_iface, iid, obj );
  
-@@ -879,6 +1031,112 @@ static HRESULT timer_create( IUnknown *outer, REFIID iid, void **obj )
+@@ -879,6 +1040,112 @@ static HRESULT timer_create( IUnknown *outer, REFIID iid, void **obj )
      return hr;
  }
  
@@ -576,7 +596,7 @@ index 22bb58ddbe2..c436e2cb136 100644
  /***********************************************************************
   *          IUIAnimationTransitionFactory
   */
-@@ -950,7 +1208,7 @@ const struct IUIAnimationTransitionFactoryVtbl tr_factory_vtbl =
+@@ -950,7 +1217,7 @@ const struct IUIAnimationTransitionFactoryVtbl tr_factory_vtbl =
      tr_factory_CreateTransition
  };
  
@@ -585,7 +605,7 @@ index 22bb58ddbe2..c436e2cb136 100644
  {
      struct tr_factory *This = malloc( sizeof(*This) );
      HRESULT hr;
-@@ -1025,48 +1283,60 @@ static HRESULT WINAPI tr_library_CreateInstantaneousTransition(IUIAnimationTrans
+@@ -1025,48 +1292,60 @@ static HRESULT WINAPI tr_library_CreateInstantaneousTransition(IUIAnimationTrans
          double finalValue, IUIAnimationTransition **transition)
  {
      struct tr_library *This = impl_from_IUIAnimationTransitionLibrary( iface );
@@ -652,7 +672,7 @@ index 22bb58ddbe2..c436e2cb136 100644
  }
  
  static HRESULT WINAPI tr_library_CreateSinusoidalTransitionFromRange(IUIAnimationTransitionLibrary *iface,
-@@ -1074,8 +1344,12 @@ static HRESULT WINAPI tr_library_CreateSinusoidalTransitionFromRange(IUIAnimatio
+@@ -1074,8 +1353,12 @@ static HRESULT WINAPI tr_library_CreateSinusoidalTransitionFromRange(IUIAnimatio
          UI_ANIMATION_SLOPE slope, IUIAnimationTransition **transition)
  {
      struct tr_library *This = impl_from_IUIAnimationTransitionLibrary( iface );
@@ -666,7 +686,7 @@ index 22bb58ddbe2..c436e2cb136 100644
  }
  
  static HRESULT WINAPI tr_library_CreateAccelerateDecelerateTransition(IUIAnimationTransitionLibrary *iface,
-@@ -1083,40 +1357,50 @@ static HRESULT WINAPI tr_library_CreateAccelerateDecelerateTransition(IUIAnimati
+@@ -1083,40 +1366,50 @@ static HRESULT WINAPI tr_library_CreateAccelerateDecelerateTransition(IUIAnimati
          IUIAnimationTransition **transition)
  {
      struct tr_library *This = impl_from_IUIAnimationTransitionLibrary( iface );
@@ -722,7 +742,7 @@ index 22bb58ddbe2..c436e2cb136 100644
  }
  
  const struct IUIAnimationTransitionLibraryVtbl tr_library_vtbl =
-@@ -1155,7 +1439,7 @@ static HRESULT library_create( IUnknown *outer, REFIID iid, void **obj )
+@@ -1155,7 +1448,7 @@ static HRESULT library_create( IUnknown *outer, REFIID iid, void **obj )
  
  static struct class_factory manager_cf = { { &class_factory_vtbl }, manager_create };
  static struct class_factory timer_cf   = { { &class_factory_vtbl }, timer_create };
