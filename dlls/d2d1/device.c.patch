@@ -1,3 +1,5 @@
+diff --git a/dlls/d2d1/device.c b/dlls/d2d1/device.c
+index 3969046d5b3..8a195cbc189 100644
 --- a/dlls/d2d1/device.c
 +++ b/dlls/d2d1/device.c
 @@ -1799,7 +1799,7 @@ static HRESULT STDMETHODCALLTYPE d2d_device_context_Flush(ID2D1DeviceContext6 *i
@@ -9,4 +11,45 @@
  }
  
  static void STDMETHODCALLTYPE d2d_device_context_SaveDrawingState(ID2D1DeviceContext6 *iface,
-
+@@ -2360,6 +2360,10 @@ static HRESULT STDMETHODCALLTYPE d2d_device_context_GetImageLocalBounds(ID2D1Dev
+     D2D_SIZE_U pixel_size;
+     ID2D1Bitmap *bitmap;
+     D2D_SIZE_F size;
++    unsigned int i;
++    ID2D1Effect *effect;
++    ID2D1Image *input;
++    D2D1_RECT_F other_bound;
+ 
+     TRACE("iface %p, image %p, local_bounds %p.\n", iface, image, local_bounds);
+ 
+@@ -2389,7 +2393,29 @@ static HRESULT STDMETHODCALLTYPE d2d_device_context_GetImageLocalBounds(ID2D1Dev
+ 
+         return S_OK;
+     }
+-    else
++    else if (SUCCEEDED(ID2D1Image_QueryInterface(image, &IID_ID2D1Effect, (void **)&effect))) {
++        FIXME("Effect get local bound is verrrry badly implemented\n");
++        // This is bad but better than undefined
++        local_bounds->left = 0.0f;
++        local_bounds->top  = 0.0f;
++        local_bounds->right = 0.0f;
++        local_bounds->bottom = 0.0f;
++
++        for (i = 0; i < ID2D1Effect_GetInputCount(effect); ++i)
++        {
++            ID2D1Effect_GetInput(effect, i, &input);
++            d2d_device_context_GetImageLocalBounds(iface, input, &other_bound);
++
++            if (other_bound.right > local_bounds->right)
++                local_bounds->right = other_bound.right;
++            if (other_bound.bottom > local_bounds->bottom)
++                local_bounds->bottom = other_bound.bottom;
++        }
++
++        ID2D1Effect_Release(effect);
++
++        return S_OK;
++    }
+     {
+         FIXME("Unable to get local bounds of image %p.\n", image);
+ 
