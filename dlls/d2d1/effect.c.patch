@@ -1,15 +1,112 @@
 diff --git a/dlls/d2d1/effect.c b/dlls/d2d1/effect.c
-index b66fe731523..d27f36c83b1 100644
+index b66fe731523..1ad14e13916 100644
 --- a/dlls/d2d1/effect.c
 +++ b/dlls/d2d1/effect.c
-@@ -2619,6 +2619,10 @@ static void d2d_effect_cleanup(struct d2d_effect *effect)
-             ID2D1Image_Release(effect->inputs[i]);
-     }
-     free(effect->inputs);
+@@ -1468,6 +1468,52 @@ static HRESULT __stdcall gaussian_blur_factory(IUnknown **effect)
+     return d2d_effect_create_impl(effect, &properties, sizeof(properties));
+ }
+ 
 +
-+    FIXME("broken vtbl for effect context somehow. may be very bad if already freed. but where ?????\n");
-+    // Bad workaround
-+    effect->effect_context->ID2D1EffectContext_iface.lpVtbl = &d2d_effect_context_vtbl;
-     ID2D1EffectContext_Release(&effect->effect_context->ID2D1EffectContext_iface);
-     if (effect->graph)
-         ID2D1TransformGraph_Release(&effect->graph->ID2D1TransformGraph_iface);
++static const WCHAR histogram_description[] =
++L"<?xml version='1.0'?>                                                   \
++  <Effect>                                                                \
++    <Property name='DisplayName' type='string' value='Histogram'/>    \
++    <Property name='Author'      type='string' value='The Wine Project'/> \
++    <Property name='Category'    type='string' value='Stub'/>             \
++    <Property name='Description' type='string' value='Hisogram'/>    \
++    <Inputs>                                                              \
++      <Input name='Source'/>                                              \
++    </Inputs>                                                             \
++    <Property name='StandardDeviation' type='float' />                    \
++    <Property name='Optimization' type='enum' />                          \
++    <Property name='BorderMode' type='enum' />                            \
++  </Effect>";
++
++struct histogram_properties
++{
++    float standard_deviation;
++    D2D1_GAUSSIANBLUR_OPTIMIZATION optimization;
++    D2D1_BORDER_MODE border_mode;
++};
++
++EFFECT_PROPERTY_RW(histogram, standard_deviation, FLOAT)
++EFFECT_PROPERTY_RW(histogram, optimization, ENUM)
++EFFECT_PROPERTY_RW(histogram, border_mode, ENUM)
++
++static const D2D1_PROPERTY_BINDING histogram_bindings[] =
++{
++    { L"StandardDeviation", BINDING_RW(histogram, standard_deviation) },
++    { L"Optimization", BINDING_RW(histogram, optimization) },
++    { L"BorderMode", BINDING_RW(histogram, border_mode) },
++};
++
++static HRESULT __stdcall histogram_factory(IUnknown **effect)
++{
++    static const struct histogram_properties properties =
++    {
++        .standard_deviation = 3.0f,
++        .optimization = D2D1_GAUSSIANBLUR_OPTIMIZATION_BALANCED,
++        .border_mode = D2D1_BORDER_MODE_SOFT,
++    };
++    return d2d_effect_create_impl(effect, &properties, sizeof(properties));
++}
++
++
+ static const WCHAR point_specular_description[] =
+ L"<?xml version='1.0'?>                                                   \
+   <Effect>                                                                \
+@@ -1828,6 +1874,7 @@ void d2d_effects_init_builtins(struct d2d_factory *factory)
+         { &CLSID_D2D1Flood, X2(flood) },
+         { &CLSID_D2D1GaussianBlur, X2(gaussian_blur) },
+         { &CLSID_D2D1PointSpecular, X2(point_specular) },
++        { &CLSID_D2D1Histogram, X2(histogram) },
+         { &CLSID_D2D1ArithmeticComposite, X2(arithmetic_composite) },
+         { &CLSID_D2D1Blend, X2(blend) },
+         { &CLSID_D2D1Brightness, X2(brightness) },
+@@ -2189,15 +2236,15 @@ static HRESULT d2d_effect_property_set_value(struct d2d_effect_properties *prope
+         struct d2d_effect_property *prop, D2D1_PROPERTY_TYPE type, const BYTE *value, UINT32 size)
+ {
+     struct d2d_effect *effect = properties->effect;
+-    if (prop->readonly || !effect) return E_INVALIDARG;
+-    if (type != D2D1_PROPERTY_TYPE_UNKNOWN && prop->type != type) return E_INVALIDARG;
+-    if (prop->get_function && !prop->set_function) return E_INVALIDARG;
+-    if (prop->index < 0x80000000 && !prop->set_function) return E_INVALIDARG;
+-
++    //if (prop->readonly || !effect) return E_INVALIDARG;
++    //if (type != D2D1_PROPERTY_TYPE_UNKNOWN && prop->type != type) return E_INVALIDARG;
++    //if (prop->get_function && !prop->set_function) return E_INVALIDARG;
++    //if (prop->index < 0x80000000 && !prop->set_function) return E_INVALIDARG;
++    return S_OK;
+     if (prop->set_function)
+         return prop->set_function((IUnknown *)effect->impl, value, size);
+ 
+-    if (prop->size != size) return E_INVALIDARG;
++    //if (prop->size != size) return E_INVALIDARG;
+ 
+     switch (prop->type)
+     {
+@@ -3144,9 +3191,11 @@ static HRESULT STDMETHODCALLTYPE d2d_effect_properties_GetValue(ID2D1Properties
+ 
+     TRACE("iface %p, index %#x, type %u, value %p, value_size %u.\n", iface, index, type, value, value_size);
+ 
+-    if (!(prop = d2d_effect_properties_get_property_by_index(properties, index)))
++    if (!(prop = d2d_effect_properties_get_property_by_index(properties, index))){
++        WARN("got here \n");
+         return D2DERR_INVALID_PROPERTY;
+-
++    }
++    WARN("got farther \n");
+     return d2d_effect_property_get_value(properties, prop, type, value, value_size);
+ }
+ 
+@@ -3429,7 +3478,9 @@ HRESULT d2d_effect_create(struct d2d_device_context *context, const CLSID *effec
+     if (!(reg = d2d_factory_get_registered_effect(context->factory, effect_id)))
+     {
+         WARN("Effect id %s not found.\n", wine_dbgstr_guid(effect_id));
+-        return D2DERR_EFFECT_IS_NOT_REGISTERED;
++
++        reg = d2d_factory_get_registered_effect(context->factory, &CLSID_D2D1Blend);
++        //return D2DERR_EFFECT_IS_NOT_REGISTERED;
+     }
+ 
+     if (!(effect_context = calloc(1, sizeof(*effect_context))))

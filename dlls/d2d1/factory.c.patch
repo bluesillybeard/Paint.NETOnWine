@@ -1,0 +1,15 @@
+diff --git a/dlls/d2d1/factory.c b/dlls/d2d1/factory.c
+index 80c147638cd..5652c4a8f9f 100644
+--- a/dlls/d2d1/factory.c
++++ b/dlls/d2d1/factory.c
+@@ -1179,7 +1179,9 @@ static HRESULT STDMETHODCALLTYPE d2d_factory_GetEffectProperties(ID2D1Factory7 *
+     if (!(reg = d2d_factory_get_registered_effect((ID2D1Factory *)iface, effect_id)))
+     {
+         WARN("Effect id %s not found.\n", wine_dbgstr_guid(effect_id));
+-        return HRESULT_FROM_WIN32(ERROR_NOT_FOUND);
++        //just go with a default
++        reg = d2d_factory_get_registered_effect((ID2D1Factory *)iface, &CLSID_D2D1Blend);
++        //return HRESULT_FROM_WIN32(ERROR_NOT_FOUND);
+     }
+ 
+     *props = &reg->properties->ID2D1Properties_iface;
