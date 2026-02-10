@@ -1,3 +1,5 @@
+diff --git a/dlls/d2d1/wic_render_target.c b/dlls/d2d1/wic_render_target.c
+index c0720e69a8a..1ef2bba1438 100644
 --- a/dlls/d2d1/wic_render_target.c
 +++ b/dlls/d2d1/wic_render_target.c
 @@ -227,6 +227,9 @@ HRESULT d2d_wic_render_target_init(struct d2d_wic_render_target *render_target,
@@ -10,4 +12,3 @@
  
          default:
              FIXME("Unhandled format %#x.\n", texture_desc.Format);
-
