@@ -1,0 +1,20 @@
+diff --git a/dlls/dxgi/factory.c b/dlls/dxgi/factory.c
+index ebdb42a3806..1879099c5b2 100644
+--- a/dlls/dxgi/factory.c
++++ b/dlls/dxgi/factory.c
+@@ -439,9 +439,14 @@ static HRESULT STDMETHODCALLTYPE dxgi_factory_EnumAdapterByLuid(IWineDXGIFactory
+ static HRESULT STDMETHODCALLTYPE dxgi_factory_EnumWarpAdapter(IWineDXGIFactory *iface,
+         REFIID iid, void **adapter)
+ {
++    HRESULT hr;
++    IDXGIAdapter1* adapter2;
+     FIXME("iface %p, iid %s, adapter %p stub!\n", iface, debugstr_guid(iid), adapter);
+ 
+-    return E_NOTIMPL;
++    hr = dxgi_factory_EnumAdapters1(iface, 0, &adapter2);
++    if(hr != S_OK)
++        return hr;
++    return IDXGIAdapter1_QueryInterface(adapter2, iid, adapter);
+ }
+ 
+ static HRESULT STDMETHODCALLTYPE dxgi_factory_CheckFeatureSupport(IWineDXGIFactory *iface,
