@@ -1,17 +1,8 @@
 diff --git a/dlls/d2d1/device.c b/dlls/d2d1/device.c
-index 3969046d5b3..8a195cbc189 100644
+index 74607dc8ea4..6549a7d9b2d 100644
 --- a/dlls/d2d1/device.c
 +++ b/dlls/d2d1/device.c
-@@ -1799,7 +1799,7 @@ static HRESULT STDMETHODCALLTYPE d2d_device_context_Flush(ID2D1DeviceContext6 *i
-     if (context->ops && context->ops->device_context_present)
-         context->ops->device_context_present(context->outer_unknown);
- 
--    return E_NOTIMPL;
-+    return S_OK;
- }
- 
- static void STDMETHODCALLTYPE d2d_device_context_SaveDrawingState(ID2D1DeviceContext6 *iface,
-@@ -2360,6 +2360,10 @@ static HRESULT STDMETHODCALLTYPE d2d_device_context_GetImageLocalBounds(ID2D1Dev
+@@ -2427,6 +2427,10 @@ static HRESULT STDMETHODCALLTYPE d2d_device_context_GetImageLocalBounds(ID2D1Dev
      D2D_SIZE_U pixel_size;
      ID2D1Bitmap *bitmap;
      D2D_SIZE_F size;
@@ -22,7 +13,7 @@ index 3969046d5b3..8a195cbc189 100644
  
      TRACE("iface %p, image %p, local_bounds %p.\n", iface, image, local_bounds);
  
-@@ -2389,7 +2393,29 @@ static HRESULT STDMETHODCALLTYPE d2d_device_context_GetImageLocalBounds(ID2D1Dev
+@@ -2456,7 +2460,29 @@ static HRESULT STDMETHODCALLTYPE d2d_device_context_GetImageLocalBounds(ID2D1Dev
  
          return S_OK;
      }
