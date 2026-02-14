@@ -1,81 +1,65 @@
-# Running Paint.NET on WINE
+# Running Paint.NET on Wine
 
-This is a temporary project for getting Paint.NET to work under WINE.
+This is a temporary project for getting Paint.NET to work under Wine.
 
-See the discussions on the Paint.NET forums [here](https://forums.getpaint.net/topic/134148-getting-the-latest-pdn-version-working-on-linux-wine-work-in-progress/)
+See the discussions on the Paint.NET forums [here](https://forums.getpaint.net/topic/134148-getting-the-latest-pdn-version-working-on-linux-wine-work-in-progress/).
 
-This contains a set of patches to be applied to upstream WINE. These changes are experimental and are published for other developers to contribute / learn from.
+This contains a set of patches to be applied to upstream Wine. These changes are experimental and are published for other developers to contribute / learn from.
 
 ## FAQ
 
-> What's missing for Paint.NET to run on linux?
+### What's missing in Wine for Paint.NET to run on Linux?
 
-Paint.NET heavily relies on the Direct2D API, which also happens to be severely underdeveloped in WINE. The vast majority of issues appear to be related to d2d1.dll.
+Paint.NET heavily relies on the Direct2D API (`d2d1.dll`), which happens to be severely underdeveloped in Wine.
 
-Paint.NET also relies on UiAnimation.dll. For the time being, a workable solution is to copy it from a windows install, however a long-term solution is to properly implement it as part of WINE
+It also relies on the Windows Animation Manager API (`UiAnimation.dll`), another underdeveloped component in Wine.
 
-> How long until I can use Paint.NET on xyz distro?
+### How long until Paint.NET can be used on xyz distro?
 
-It's going to be a long time before any of this is remotely ready for general use. However, the goal is to eventually get Paint.NET running more or less right out of the box with a standard up-to-date WINE installation.
+It's going to be a long time before any of this is remotely ready for general use. However, the goal is to eventually get Paint.NET running more or less right out of the box with a standard up-to-date Wine installation.
 
-> Will this project support MacOS?
+### Will this project support MacOS?
 
-WINE itself does support MacOS, however we are not testing on MacOS for now. If you can test and debug on MacOS, that would be appreciated, even if it's just a confirmation that it does/doesn't work.
+Wine itself does support MacOS, however we are not testing on MacOS for now. If you can test and debug on MacOS, that would be appreciated, even if it's just a confirmation that it does/doesn't work.
 
 If you have any questions, please post on the Paint.NET [forum thread](https://forums.getpaint.net/topic/134148-getting-the-latest-pdn-version-working-on-linux-wine-work-in-progress/) or in the github discussions.
 
-## Getting Started
+## Setting up for Wine development
 
 I highly suggest using a virtual machine to complete everything here.
 
-Paint.NET has 32 bit and 64 bit components, so you need to do a WOW64 build. I suggest using a chroot environment for building, and a regular VM environment for installing/testing/debugging.
+Clone the Wine repository from [WineHQ GitLab](https://gitlab.winehq.org/wine/wine), apply the patches found here, and follow Wine's [building guide](https://gitlab.winehq.org/wine/wine)
 
-Clone [WINE from gitlab](https://gitlab.winehq.org/wine/wine), apply the patches here, and follow WINEs [building guide](https://gitlab.winehq.org/wine/wine)
+Building Wine can be an absolute hassle, but it's a mandatory step if you want to contribute to the project.
 
-Building wine can be an absolute hassle, but it's a mandatory step if you want to contribute to the project.
+If all you want to do is use Paint.NET, I suggest waiting until this project is merged into mainline Wine as all changes here are experimental until then. Setting this up is not for the faint of heart, so you should either be prepared to spend several hours setting things up, or just wait until mainline Wine supports Paint.NET.
 
-If all you want to do is use Paint.NET, I suggest waiting until this project is merged into mainline WINE as all changes here are experimental until then. Setting this up is not for the faint of heart, so you should either be prepared to spend several hours setting things up, or just wait until mainline WINE supports Paint.NET.
+## Setting up for running Paint.NET
 
-## Setting up
-
-Once you have wine built and installed, you need to set up your system for running Paint.NET.
+Once you have Wine built and installed, you need to set up your Wine prefix for running Paint.NET.
 
 First, run `winecfg` to initialize the prefix.
 
-Next, use winetricks to install Microsofts dotnet framework with `winetricks dotnet48` - Wine mono exists as an alternative to this, but Paint.NET does not run on wine mono. DO NOT install wine mono before or after installing microsoft dotnet, that will cause issues.
+Next, use `winetricks` to install the Microsoft .NET Framework with `winetricks dotnet48` - Wine mono exists as an alternative to this, but Paint.NET does not run on wine mono. DO NOT install wine mono before or after installing Microsoft .NET Framework, that will cause issues.
 
-Next, source `UiAnimation.dll` from a reputable source. I personally grabbed it from an actual windows installation. The 64 bit version is found at `C:\Windows\System32\UiAnimation.dll` and the 32 bit one at `C:\Windows\SysWOW64\UiAnimation.dll`. They must be copied to their equivalent locations in the wine prefix, which is `~/.wine/drive_c` by default.
+Install Arial and Calibri fonts with `winetricks arial calibri`. Paint.NET will actually crash in the text selection menu without these.
 
-Use `winecfg` to add `uianimation.dll` to the dll overrides.
-
-Install Arial, Segui UI, and Calibri fonts on your system. Paint.NET will actually crash in the text selection menu without these. I copied them from my windows install, but these fonts are popular enough to be found in various places.
-
-These patches are only tested with Paint.NET v4.0 for the time being. The Internet Archive is a reputable place to source older versions of Paint.NET, but be aware that they are entirely unsupported and the goal is to get the latest version working.
+These patches are only tested with Paint.NET v4.0 for the time being. The Internet Archive is a reputable place to source older versions of Paint.NET, but be aware that they are entirely unsupported, and the goal is to get the latest version working.
 
 ## Roadmap
 
-Part 1:
-- post all known issues on the github issue tracker
-- Split patches by file for easier browsing
+- Post all known issues on the [issue tracker](https://github.com/bluesillybeard/Paint.NETOnWine/issues)
 - Fix most of the major problems with Paint.NET v4.0
 - Update to the latest version of Paint.NET
 - Fix all of the crashes
 - Fix most of the usability problems
-- submit to upstream WINE
-- wait for the next release
-- write a public guide for installing.using Paint.NET on Linux
-
-Once that is completed, the next step will be eliminating the need to copy UiAnimation.dll from a windows install so Paint.NET can work out-of-the-box.
+- Submit to upstream Wine
+- Wait for the next stable Wine release
 
 ## Shoutouts
 
-This section is to give credit to those who are not listed as contributors on Github
+This section is to give credit to those who are not listed as contributors on GitHub
 
-- Rick Brewster for creating Paint.NET to begin with and encouraging this project
-- toe_head2001 for laying the groundwork for getting this project started
+- [Rick Brewster](https://github.com/rickbrew) for creating Paint.NET to begin with and encouraging this project
+- [toe_head2001](https://github.com/toehead2001) for creating the initial patchset that was used to get this project started
 - Several others on the Paint.NET forum for inspiring and motivating this project
-
-
-
-
-
