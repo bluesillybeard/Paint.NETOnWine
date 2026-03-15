@@ -1,5 +1,5 @@
 diff --git a/dlls/d2d1/device.c b/dlls/d2d1/device.c
-index b3560f09c12..ab74219f7c5 100644
+index b3560f09c12..819bbaabdcd 100644
 --- a/dlls/d2d1/device.c
 +++ b/dlls/d2d1/device.c
 @@ -2199,13 +2199,196 @@ static HRESULT STDMETHODCALLTYPE d2d_device_context_ID2D1DeviceContext_CreateBit
@@ -188,13 +188,13 @@ index b3560f09c12..ab74219f7c5 100644
  static HRESULT STDMETHODCALLTYPE d2d_device_context_CreateColorContext(ID2D1DeviceContext6 *iface,
          D2D1_COLOR_SPACE space, const BYTE *profile, UINT32 profile_size, ID2D1ColorContext **color_context)
  {
++    struct d2d_device_context *context = impl_from_ID2D1DeviceContext(iface);
++    HRESULT hr = d2d_color_context_create((ID2D1ColorContext1**) color_context, context->factory);
++
      FIXME("iface %p, space %#x, profile %p, profile_size %u, color_context %p stub!\n",
              iface, space, profile, profile_size, color_context);
  
 -    return E_NOTIMPL;
-+    struct d2d_device_context *context = impl_from_ID2D1DeviceContext(iface);
-+    HRESULT hr = d2d_color_context_create((ID2D1ColorContext1**) color_context, context->factory);
-+ 
 +    TRACE("%p", color_context);
 +    return hr;
  }
