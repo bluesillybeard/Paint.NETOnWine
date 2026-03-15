@@ -1,9 +1,9 @@
 diff --git a/dlls/coremessaging/dispatcher_queue.c b/dlls/coremessaging/dispatcher_queue.c
 new file mode 100644
-index 00000000000..4cf4b6a9e6f
+index 00000000000..d3f075244f7
 --- /dev/null
 +++ b/dlls/coremessaging/dispatcher_queue.c
-@@ -0,0 +1,297 @@
+@@ -0,0 +1,296 @@
 +/* 
 + *
 + * Copyright (C) 
@@ -49,11 +49,12 @@ index 00000000000..4cf4b6a9e6f
 +
 +    TRACE( "(%p)->(%s %p)\n", This, debugstr_guid( iid ), obj );
 +
++    //TODO, we dont actually implement DispatcherQueue2, we just say we do
 +    if (IsEqualIID( iid, &IID_IUnknown ) ||
 +        IsEqualIID( iid, &IID_IInspectable) ||
-+        IsEqualIID( iid, &IID_IDispatcherQueue ) || 
++        IsEqualIID( iid, &IID_IDispatcherQueue ) ||  
 +        IsEqualIID( iid, &IID_IDispatcherQueue2 ))
-+    { //TODO, we dont actually implement DispatcherQueue2, we just say we do
++    {
 +        IDispatcherQueue_AddRef( iface );
 +        *obj = iface;
 +        return S_OK;

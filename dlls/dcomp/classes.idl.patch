@@ -1,6 +1,6 @@
 diff --git a/dlls/dcomp/classes.idl b/dlls/dcomp/classes.idl
 new file mode 100644
-index 00000000000..aee78ebdbdd
+index 00000000000..1303f970c6f
 --- /dev/null
 +++ b/dlls/dcomp/classes.idl
 @@ -0,0 +1,28 @@

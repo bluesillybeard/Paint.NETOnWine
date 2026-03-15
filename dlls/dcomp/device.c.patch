@@ -1,5 +1,5 @@
 diff --git a/dlls/dcomp/device.c b/dlls/dcomp/device.c
-index 2744d758e91..9a439bbe615 100644
+index 2744d758e91..9fb4866bfe9 100644
 --- a/dlls/dcomp/device.c
 +++ b/dlls/dcomp/device.c
 @@ -15,13 +15,27 @@
@@ -30,7 +30,7 @@ index 2744d758e91..9a439bbe615 100644
  
  WINE_DEFAULT_DEBUG_CHANNEL(dcomp);
  
-@@ -45,3 +59,170 @@ HRESULT WINAPI DCompositionCreateDevice3(IUnknown *rendering_device, REFIID iid,
+@@ -45,3 +59,171 @@ HRESULT WINAPI DCompositionCreateDevice3(IUnknown *rendering_device, REFIID iid,
  
      return E_NOTIMPL;
  }
@@ -112,7 +112,8 @@ index 2744d758e91..9a439bbe615 100644
 +    struct compositor_controller *impl = impl_from_ICompositorController( iface );
 +    TRACE( "STUB iface %p. \n", iface);
 +    //compositor_controller_create((ICompositorController**) value);
-+    *value = (__x_ABI_CWindows_CUI_CComposition_CICompositor *) iface; //TODO: this is here just so the pointer isnt null. this WILL segfault. need to actually implement compositor
++    //TODO: this is here just so the pointer isnt null. this WILL segfault. need to actually implement compositor
++    *value = (__x_ABI_CWindows_CUI_CComposition_CICompositor *) iface;
 +    return S_OK;
 +}
 +
