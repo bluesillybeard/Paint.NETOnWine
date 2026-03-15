@@ -1,8 +1,8 @@
 diff --git a/dlls/user32/win.c b/dlls/user32/win.c
-index cef0beeacda..57cdc666b54 100644
+index ac8b33a9c84..af5e6db37c1 100644
 --- a/dlls/user32/win.c
 +++ b/dlls/user32/win.c
-@@ -1621,6 +1621,16 @@ BOOL WINAPI SetWindowDisplayAffinity(HWND hwnd, DWORD affinity)
+@@ -1620,6 +1620,16 @@ BOOL WINAPI SetWindowDisplayAffinity(HWND hwnd, DWORD affinity)
      return FALSE;
  }
  

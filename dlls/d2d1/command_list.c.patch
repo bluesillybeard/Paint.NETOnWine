@@ -1,8 +1,8 @@
 diff --git a/dlls/d2d1/command_list.c b/dlls/d2d1/command_list.c
-index 4d81f0f1ccf..a7f67f322af 100644
+index 34242ddd88a..e6ce998bb61 100644
 --- a/dlls/d2d1/command_list.c
 +++ b/dlls/d2d1/command_list.c
-@@ -475,8 +475,8 @@ static HRESULT STDMETHODCALLTYPE d2d_command_list_Close(ID2D1CommandList *iface)
+@@ -474,8 +474,8 @@ static HRESULT STDMETHODCALLTYPE d2d_command_list_Close(ID2D1CommandList *iface)
  
      FIXME("iface %p stub.\n", iface);
  
