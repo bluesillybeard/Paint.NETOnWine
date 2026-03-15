@@ -23,9 +23,7 @@ index 00000000000..4cf4b6a9e6f
 + * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 + */
 +
-+//#include "initguid.h"
 +#include "private.h"
-+//#include "dispatcherqueue.h"
 +#include "wine/debug.h"
 +
 +WINE_DEFAULT_DEBUG_CHANNEL(messaging);
