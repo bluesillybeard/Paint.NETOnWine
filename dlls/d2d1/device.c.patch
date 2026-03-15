@@ -1,5 +1,5 @@
 diff --git a/dlls/d2d1/device.c b/dlls/d2d1/device.c
-index b3560f09c12..50ee307a860 100644
+index b3560f09c12..ab74219f7c5 100644
 --- a/dlls/d2d1/device.c
 +++ b/dlls/d2d1/device.c
 @@ -2199,13 +2199,196 @@ static HRESULT STDMETHODCALLTYPE d2d_device_context_ID2D1DeviceContext_CreateBit
@@ -233,7 +233,7 @@ index b3560f09c12..50ee307a860 100644
  
      TRACE("iface %p, image %p, local_bounds %p.\n", iface, image, local_bounds);
  
-@@ -2456,7 +2644,35 @@ static HRESULT STDMETHODCALLTYPE d2d_device_context_GetImageLocalBounds(ID2D1Dev
+@@ -2456,7 +2644,37 @@ static HRESULT STDMETHODCALLTYPE d2d_device_context_GetImageLocalBounds(ID2D1Dev
  
          return S_OK;
      }
@@ -261,6 +261,8 @@ index b3560f09c12..50ee307a860 100644
 +                local_bounds->right = other_bound.right;
 +            if (other_bound.bottom > local_bounds->bottom)
 +                local_bounds->bottom = other_bound.bottom;
++
++            ID2D1Image_Release(input);
 +        }
 +
 +        ID2D1Effect_Release(effect);
