@@ -22,7 +22,7 @@ It's going to be a long time before any of this is remotely ready for general us
 
 Wine itself does support MacOS, however we are not testing on MacOS for now. If you can test and debug on MacOS, that would be appreciated, even if it's just a confirmation that it does/doesn't work.
 
-If you have any questions, please post on the Paint.NET [forum thread](https://forums.getpaint.net/topic/134148-getting-the-latest-pdn-version-working-on-linux-wine-work-in-progress/) in the github discussions, or on the [discord server](discord.gg/DMargAA4Rv)
+If you have any questions, please post on the Paint.NET [forum thread](https://forums.getpaint.net/topic/134148-getting-the-latest-pdn-version-working-on-linux-wine-work-in-progress/) in the github discussions, or on the [discord server](https://discord.gg/7Qe3frA)
 
 ## Setting up for Wine development
 
