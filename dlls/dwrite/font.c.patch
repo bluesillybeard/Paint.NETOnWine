@@ -1,0 +1,43 @@
+diff --git a/dlls/dwrite/font.c b/dlls/dwrite/font.c
+index f207bade10e..403002d2999 100644
+--- a/dlls/dwrite/font.c
++++ b/dlls/dwrite/font.c
+@@ -5831,6 +5831,29 @@ static ULONG WINAPI glyphrunanalysis_Release(IDWriteGlyphRunAnalysis *iface)
+     return refcount;
+ }
+ 
++// Surely should not be in this file. or there is a better alternative ?
++// but this work so
++// Note: this is to avoid crash on paint.net 5. easily replicable by hovering over the toolbox and moving the mouse
++static void addSafe(LONG* pos, INT value) {
++    LONG current = *pos;
++    LONG result = current + (LONG)value;
++    TRACE("somehow, this is needed ? optimization issue ?");
++    if ((value > 0) && (current > result)) {
++        *pos = LONG_MAX;
++    }
++    else if ((value < 0) && (current < result)) {
++        *pos = LONG_MIN;
++    }
++    else *pos = result;
++}
++
++static void OffsetRectSafe(RECT* rect, INT x, INT y) {
++    addSafe(&rect->left, x);
++    addSafe(&rect->right, x);
++    addSafe(&rect->top, y);
++    addSafe(&rect->bottom, y);
++}
++
+ static void glyphrunanalysis_get_texturebounds(struct dwrite_glyphrunanalysis *analysis, RECT *bounds)
+ {
+     struct dwrite_glyphbitmap glyph_bitmap;
+@@ -5862,7 +5885,7 @@ static void glyphrunanalysis_get_texturebounds(struct dwrite_glyphrunanalysis *a
+         if (bitmap_size > analysis->max_glyph_bitmap_size)
+             analysis->max_glyph_bitmap_size = bitmap_size;
+ 
+-        OffsetRect(bbox, analysis->origins[i].x, analysis->origins[i].y);
++        OffsetRectSafe(bbox, analysis->origins[i].x, analysis->origins[i].y);
+         UnionRect(&analysis->bounds, &analysis->bounds, bbox);
+     }
+ 

@@ -1,5 +1,5 @@
 diff --git a/dlls/uianimation/main.c b/dlls/uianimation/main.c
-index 22bb58ddbe2..8c6c9ab23bb 100644
+index 22bb58ddbe2..bb45b01a8c3 100644
 --- a/dlls/uianimation/main.c
 +++ b/dlls/uianimation/main.c
 @@ -27,6 +27,8 @@

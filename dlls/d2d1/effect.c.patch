@@ -1,5 +1,5 @@
 diff --git a/dlls/d2d1/effect.c b/dlls/d2d1/effect.c
-index b66fe731523..1417cb1879d 100644
+index 286fae95e9c..4c85701bea0 100644
 --- a/dlls/d2d1/effect.c
 +++ b/dlls/d2d1/effect.c
 @@ -17,6 +17,7 @@
@@ -224,17 +224,7 @@ index b66fe731523..1417cb1879d 100644
  }
  
  static HRESULT STDMETHODCALLTYPE d2d_effect_context_CreateBlendTransform(ID2D1EffectContext *iface,
-@@ -2806,7 +2955,8 @@ static void STDMETHODCALLTYPE d2d_effect_SetInput(ID2D1Effect *iface, UINT32 ind
- 
-     if (index >= effect->input_count)
-         return;
--
-+    if(input == NULL)
-+        return;
-     ID2D1Image_AddRef(input);
-     if (effect->inputs[index])
-         ID2D1Image_Release(effect->inputs[index]);
-@@ -3258,7 +3408,7 @@ static HRESULT STDMETHODCALLTYPE d2d_draw_info_SetInputDescription(ID2D1DrawInfo
+@@ -3259,7 +3408,7 @@ static HRESULT STDMETHODCALLTYPE d2d_draw_info_SetInputDescription(ID2D1DrawInfo
  {
      FIXME("iface %p, index %u stub.\n", iface, index);
  
@@ -243,7 +233,7 @@ index b66fe731523..1417cb1879d 100644
  }
  
  static HRESULT STDMETHODCALLTYPE d2d_draw_info_SetOutputBuffer(ID2D1DrawInfo *iface,
-@@ -3266,7 +3416,7 @@ static HRESULT STDMETHODCALLTYPE d2d_draw_info_SetOutputBuffer(ID2D1DrawInfo *if
+@@ -3267,7 +3416,7 @@ static HRESULT STDMETHODCALLTYPE d2d_draw_info_SetOutputBuffer(ID2D1DrawInfo *if
  {
      FIXME("iface %p, precision %u, depth %u stub.\n", iface, precision, depth);
  
@@ -252,7 +242,7 @@ index b66fe731523..1417cb1879d 100644
  }
  
  static void STDMETHODCALLTYPE d2d_draw_info_SetCached(ID2D1DrawInfo *iface, BOOL is_cached)
-@@ -3409,7 +3559,7 @@ static HRESULT d2d_effect_transform_graph_initialize_nodes(struct d2d_transform_
+@@ -3410,7 +3559,7 @@ static HRESULT d2d_effect_transform_graph_initialize_nodes(struct d2d_transform_
          else
          {
              FIXME("Unsupported node %p.\n", node);
@@ -261,7 +251,7 @@ index b66fe731523..1417cb1879d 100644
          }
      }
  
-@@ -3425,11 +3575,98 @@ HRESULT d2d_effect_create(struct d2d_device_context *context, const CLSID *effec
+@@ -3426,11 +3575,98 @@ HRESULT d2d_effect_create(struct d2d_device_context *context, const CLSID *effec
      UINT32 input_count;
      WCHAR clsidW[39];
      HRESULT hr;
@@ -361,7 +351,7 @@ index b66fe731523..1417cb1879d 100644
      }
  
      if (!(effect_context = calloc(1, sizeof(*effect_context))))
-@@ -3471,8 +3708,9 @@ HRESULT d2d_effect_create(struct d2d_device_context *context, const CLSID *effec
+@@ -3472,8 +3708,9 @@ HRESULT d2d_effect_create(struct d2d_device_context *context, const CLSID *effec
          ID2D1Effect_Release(&object->ID2D1Effect_iface);
          return hr;
      }
