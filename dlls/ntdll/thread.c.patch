@@ -1,0 +1,12 @@
+diff --git a/dlls/ntdll/thread.c b/dlls/ntdll/thread.c
+index fe083befbca..cea6ea798f9 100644
+--- a/dlls/ntdll/thread.c
++++ b/dlls/ntdll/thread.c
+@@ -154,6 +154,7 @@ int __cdecl __wine_dbg_header( enum __wine_debug_class cls, struct __wine_debug_
+     }
+     if (TRACE_ON(pid)) pos += sprintf( pos, "%04lx:", GetCurrentProcessId() );
+     pos += sprintf( pos, "%04lx:", GetCurrentThreadId() );
++    pos += sprintf( pos, "%p:", &pos);
+     if (function && cls < ARRAY_SIZE( classes ))
+         pos += snprintf( pos, sizeof(info->output) - (pos - info->output), "%s:%s:%s ",
+                          classes[cls], channel->name, function );
