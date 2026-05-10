@@ -12,7 +12,7 @@ index f207bade10e..403002d2999 100644
 +static void addSafe(LONG* pos, INT value) {
 +    LONG current = *pos;
 +    LONG result = current + (LONG)value;
-+    TRACE("somehow, this is needed ? optimization issue ?");
++    TRACE("somehow, this is needed ? optimization issue ?\n");
 +    if ((value > 0) && (current > result)) {
 +        *pos = LONG_MAX;
 +    }
