@@ -1,5 +1,5 @@
 diff --git a/dlls/d2d1/d2d1_private.h b/dlls/d2d1/d2d1_private.h
-index 9c78aaf92e2..45adf8a866d 100644
+index 9c78aaf92e2..f7efdf7ea51 100644
 --- a/dlls/d2d1/d2d1_private.h
 +++ b/dlls/d2d1/d2d1_private.h
 @@ -455,6 +455,8 @@ HRESULT d2d_bitmap_create(struct d2d_device_context *context, D2D1_SIZE_U size,
@@ -15,7 +15,7 @@ index 9c78aaf92e2..45adf8a866d 100644
              ellipse->point.x, ellipse->point.y, ellipse->radiusX, ellipse->radiusY);
  }
  
-+void WINAPI wined2d_mutex_lock(void);
-+void WINAPI wined2d_mutex_unlock(void);
++void WINAPI wined2d_mutex_lock(struct d2d_factory *);
++void WINAPI wined2d_mutex_unlock(struct d2d_factory *);
 +
  #endif /* __WINE_D2D1_PRIVATE_H */
