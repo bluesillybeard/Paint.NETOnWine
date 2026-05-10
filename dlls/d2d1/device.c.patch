@@ -1,8 +1,38 @@
 diff --git a/dlls/d2d1/device.c b/dlls/d2d1/device.c
-index b3560f09c12..4bea9354fdd 100644
+index b3560f09c12..6cfc6a4647b 100644
 --- a/dlls/d2d1/device.c
 +++ b/dlls/d2d1/device.c
-@@ -2199,13 +2199,196 @@ static HRESULT STDMETHODCALLTYPE d2d_device_context_ID2D1DeviceContext_CreateBit
+@@ -21,6 +21,29 @@
+ 
+ WINE_DEFAULT_DEBUG_CHANNEL(d2d);
+ 
++static CRITICAL_SECTION wined2d_cs;
++static CRITICAL_SECTION_DEBUG wined2d_cs_debug =
++{
++    0, 0, &wined2d_cs,
++    {&wined2d_cs_debug.ProcessLocksList,
++    &wined2d_cs_debug.ProcessLocksList},
++    0, 0, {(DWORD_PTR)(__FILE__ ": wined2d_cs")}
++};
++static CRITICAL_SECTION wined2d_cs = {&wined2d_cs_debug, -1, 0, 0, 0, 0};
++
++void WINAPI wined2d_mutex_lock(void)
++{
++    TRACE("mutex locking\n");
++    EnterCriticalSection(&wined2d_cs);
++    TRACE("mutex locked\n");
++}
++
++void WINAPI wined2d_mutex_unlock(void)
++{
++    LeaveCriticalSection(&wined2d_cs);
++    TRACE("mutex unlocking\n");
++}
++
+ #define INITIAL_CLIP_STACK_SIZE 4
+ 
+ static const D2D1_MATRIX_3X2_F identity =
+@@ -2199,13 +2222,196 @@ static HRESULT STDMETHODCALLTYPE d2d_device_context_ID2D1DeviceContext_CreateBit
      return hr;
  }
  
@@ -200,7 +230,7 @@ index b3560f09c12..4bea9354fdd 100644
  }
  
  static HRESULT STDMETHODCALLTYPE d2d_device_context_CreateColorContextFromFilename(ID2D1DeviceContext6 *iface,
-@@ -2219,9 +2402,9 @@ static HRESULT STDMETHODCALLTYPE d2d_device_context_CreateColorContextFromFilena
+@@ -2219,9 +2425,9 @@ static HRESULT STDMETHODCALLTYPE d2d_device_context_CreateColorContextFromFilena
  static HRESULT STDMETHODCALLTYPE d2d_device_context_CreateColorContextFromWicColorContext(ID2D1DeviceContext6 *iface,
          IWICColorContext *wic_color_context, ID2D1ColorContext **color_context)
  {
@@ -212,7 +242,7 @@ index b3560f09c12..4bea9354fdd 100644
  }
  
  static BOOL d2d_bitmap_check_options_with_surface(unsigned int options, unsigned int surface_options)
-@@ -2330,7 +2513,7 @@ static HRESULT STDMETHODCALLTYPE d2d_device_context_ID2D1DeviceContext_CreateGra
+@@ -2330,7 +2536,7 @@ static HRESULT STDMETHODCALLTYPE d2d_device_context_ID2D1DeviceContext_CreateGra
              iface, stops, stop_count, preinterpolation_space, postinterpolation_space,
              buffer_precision, extend_mode, color_interpolation_mode, gradient);
  
@@ -221,7 +251,7 @@ index b3560f09c12..4bea9354fdd 100644
  }
  
  static HRESULT STDMETHODCALLTYPE d2d_device_context_CreateImageBrush(ID2D1DeviceContext6 *iface,
-@@ -2427,6 +2610,11 @@ static HRESULT STDMETHODCALLTYPE d2d_device_context_GetImageLocalBounds(ID2D1Dev
+@@ -2427,6 +2633,11 @@ static HRESULT STDMETHODCALLTYPE d2d_device_context_GetImageLocalBounds(ID2D1Dev
      D2D_SIZE_U pixel_size;
      ID2D1Bitmap *bitmap;
      D2D_SIZE_F size;
@@ -233,7 +263,7 @@ index b3560f09c12..4bea9354fdd 100644
  
      TRACE("iface %p, image %p, local_bounds %p.\n", iface, image, local_bounds);
  
-@@ -2456,7 +2644,37 @@ static HRESULT STDMETHODCALLTYPE d2d_device_context_GetImageLocalBounds(ID2D1Dev
+@@ -2456,7 +2667,37 @@ static HRESULT STDMETHODCALLTYPE d2d_device_context_GetImageLocalBounds(ID2D1Dev
  
          return S_OK;
      }

@@ -1,8 +1,39 @@
 diff --git a/dlls/d2d1/factory.c b/dlls/d2d1/factory.c
-index 80c147638cd..6f0f87b3d9e 100644
+index 80c147638cd..db9476a2b46 100644
 --- a/dlls/d2d1/factory.c
 +++ b/dlls/d2d1/factory.c
-@@ -1179,7 +1179,94 @@ static HRESULT STDMETHODCALLTYPE d2d_factory_GetEffectProperties(ID2D1Factory7 *
+@@ -403,12 +403,15 @@ static HRESULT STDMETHODCALLTYPE d2d_factory_CreateWicBitmapRenderTarget(ID2D1Fa
+ 
+     TRACE("iface %p, target %p, desc %p, render_target %p.\n", iface, target, desc, render_target);
+ 
++    wined2d_mutex_lock();
++
+     if (!(object = calloc(1, sizeof(*object))))
+         return E_OUTOFMEMORY;
+ 
+     if (FAILED(hr = d2d_factory_get_device(factory, &device)))
+     {
+         free(object);
++        wined2d_mutex_unlock();
+         return hr;
+     }
+ 
+@@ -416,12 +419,13 @@ static HRESULT STDMETHODCALLTYPE d2d_factory_CreateWicBitmapRenderTarget(ID2D1Fa
+     {
+         WARN("Failed to initialise render target, hr %#lx.\n", hr);
+         free(object);
++        wined2d_mutex_unlock();
+         return hr;
+     }
+ 
+     TRACE("Created render target %p.\n", object);
+     *render_target = object->dxgi_target;
+-
++    wined2d_mutex_unlock();
+     return S_OK;
+ }
+ 
+@@ -1179,7 +1183,94 @@ static HRESULT STDMETHODCALLTYPE d2d_factory_GetEffectProperties(ID2D1Factory7 *
      if (!(reg = d2d_factory_get_registered_effect((ID2D1Factory *)iface, effect_id)))
      {
          WARN("Effect id %s not found.\n", wine_dbgstr_guid(effect_id));
