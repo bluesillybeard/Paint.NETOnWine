@@ -93,20 +93,11 @@ echo "You will need to install winetricks"
 echo ""
 echo "You will also need cabextract in order for some fonts to be extracted when setting up the prefix."
 echo ""
-echo "Then you can simply run '$0 setup', which will automatically download, configure, build, and set up WINE for Paint.NET."
-echo "Some wrapper scripts are also created so you can simply run ./wine instead of dealing with the prefix env."
+echo "Then you can run '$0 download', '$0 makescripts', '$0 applypatch', '$0 configure', '$0 make', and '$0 createprefix' in that order."
+echo "Take a look at those individual commands help texts for more info."
 echo ""
 echo "After editing the source code, you only need to run '$0 make' to rebuild WINE with the new source code changes."
 echo "To update your local copy of the patches repo, run '$0 makepatch'."
-
-elif test $command == "setup"; then # command
-
-$0 download
-$0 makescripts
-$0 applypatch
-$0 configure
-$0 make
-$0 createprefix
 
 elif test $command == "makescripts"; then # command
 
