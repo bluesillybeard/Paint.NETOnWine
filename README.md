@@ -44,7 +44,7 @@ The simplest way is to use the helper script: [[link](https://github.com/bluesil
 4. Install `cabextract`. On Debian it's available as a plain apt package: `sudo apt install cabextract`. Your favorite distro likely provides it as a standard package.
 5. Install `winetricks`. Your favorite distro may or may not provide it as a package, so here is a link to its repo: https://github.com/Winetricks/winetricks
 6. Install `git` if you don't already have it
-7. You will also need a MINGW cross compiler. On debian this can be installed via `sudo apt install gcc-mingw-w64 g++-mingw-264`
+7. You will also need a MINGW cross compiler. On debian this can be installed via `sudo apt install gcc-mingw-w64 g++-mingw-w64`
     - This is not listed in the building wine guide, for whatever reason
 
 Assuming you have done everything correctly, now you may run each of the script commands in this order:
