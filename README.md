@@ -55,10 +55,11 @@ Assuming you have done everything correctly, now you may run each of the script 
 3. `./pdnhelper.sh applypatch`
     - This will use git to apply these patches to the WINE source code.
 4. `./pdnhelper.sh configure`
-    - This one will likely spit out a bunch of errors the first few times as you install any missing dependencies. The WINE building guide, nor this guide, lists out all of the dependencies that are required at build time. It's nothing to be scared of, just look out for when it says "missing xyz" or "could not find xyz", which will list out what needs to be installed. Each time, just install the dependency listed, then re-run this sub command.
+    - This one will likely spit out a bunch of errors the first few times as you install any missing dependencies. Neitther the WINE building guide, nor this guide, list out all of the dependencies that are required at build time. It's nothing to be scared of, just look out for when it says "missing xyz" or "could not find xyz", which will list out what needs to be installed. Each time, just install the dependency listed, then re-run this sub command.
 5. `./pdnhelper.sh make`
     - This will take really quite a while to run. On my computer it takes 5 minutes. The script does a 64-bit only build, so it is still half the time of a standard build of WINE.
 6. `./pdnhelper.sh createprefix`
+    - This will spit out a bunch of errors. This is because wintricks does not yet fully support 64 bit prefixes, while the script creates a 64 bit wine build. Ignore the errors mentioning 64 bit.
     - This will open on a popup window, first to set up the wine prefix.
     - IMPORTANT: when WINE asks whether to install Mono, make sure to click "Cancel". Installing wine mono will cause issues if you want to run any installers or a version of Paint.NET from before they started bundling .NET into the package.
 
@@ -68,7 +69,9 @@ The `makescripts` sub command should have created another script called `wine` i
 
 ### Other notes
 
-You may want to install .NET Framework in order to run Paint.NET 4.x or the installer. If the steps above were followed correctly, you can simply run `./winetricks dotnet48` in the same folder you completed the steps. Note that if you accidentally clicked "Install" instead of "Cancel" in step 6, this will not work. In the event you did hit "Install", you can delete the `prefix` folder that the script created, and re-run `./pdnhelper.sh createprefix`.
+If you specifically want to use a version of Paint.NET from before 4.3, you will want to install .NET Framework and do a combined 64 and 32 bit WINE build. ONLY DO THIS IF YOU SPECIFICALLY WANT TO RUN 4.2 OR OLDER. Doing a 32+64 bit wine build is absolute pure pain, I would suggest skipping the `configure` and `make` steps and building wine manually instead. The WINE building guide can be found here: https://gitlab.winehq.org/wine/wine/-/wikis/Building-Wine. Once you have such a wine build, you can simply run `./winetricks dotnet48` in the same folder you completed the steps. Note that if you accidentally clicked "Install" instead of "Cancel" in step 6, this will not work. In the event you did hit "Install", you can delete the `prefix` folder that the script created, and re-run `./pdnhelper.sh createprefix`.
+
+WINEs UiAnimation.dll is severely not functional. If you are using Paint.NET 5.2 or newer, you should put `"UI/AnimationServiceImplementation" : "Null"` to the AppSettings.json (assuming portable version) to avoid uianimation related issues.
 
 ### Setting up manually
 
@@ -77,8 +80,7 @@ If for some reason you don't want to use the helper script, the helper script it
 ## Roadmap
 
 - Post all known issues on the [issue tracker](https://github.com/bluesillybeard/Paint.NETOnWine/issues)
-- Fix most of the major problems with Paint.NET v4.0
-- Get Paint.NET v5.x running at all
+- Get Paint.NET v5.x running reasonably
 - Fix all of the crashes
 - Fix most of the usability problems
 - Figure out what to do from there
