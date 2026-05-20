@@ -47,7 +47,7 @@ The simplest way is to use the helper script: [[link](https://github.com/bluesil
 7. You will also need a MINGW cross compiler. On debian this can be installed via `sudo apt install gcc-mingw-w64 g++-mingw-w64`
     - This is not listed in the building wine guide, for whatever reason
 
-Assuming you have done everything correctly, now you may run each of the script commands in this order:
+Assuming you have done everything correctly, now you may run each of the script commands. Note that the script must be run from the reasonable location such as `~/Projects/pdnonwine`, since it uses $PWD for all file paths. Run the commands in this order:
 1. `./pdnhelper.sh download`
     - This will download the WINE source code as well as these patches
 2. `./pdnhelper.sh makescripts`
