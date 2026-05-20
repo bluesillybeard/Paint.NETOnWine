@@ -1,8 +1,16 @@
 diff --git a/dlls/d2d1/command_list.c b/dlls/d2d1/command_list.c
-index 34242ddd88a..e6ce998bb61 100644
+index 34242ddd88a..e80452a0fba 100644
 --- a/dlls/d2d1/command_list.c
 +++ b/dlls/d2d1/command_list.c
-@@ -474,8 +474,8 @@ static HRESULT STDMETHODCALLTYPE d2d_command_list_Close(ID2D1CommandList *iface)
+@@ -17,6 +17,7 @@
+  */
+ 
+ #include "d2d1_private.h"
++#include "winerror.h"
+ 
+ WINE_DEFAULT_DEBUG_CHANNEL(d2d);
+ 
+@@ -474,8 +475,8 @@ static HRESULT STDMETHODCALLTYPE d2d_command_list_Close(ID2D1CommandList *iface)
  
      FIXME("iface %p stub.\n", iface);
  
@@ -13,3 +21,50 @@ index 34242ddd88a..e6ce998bb61 100644
  
      command_list->state = D2D_COMMAND_LIST_STATE_CLOSED;
  
+@@ -899,6 +900,10 @@ void d2d_command_list_set_text_rendering_params(struct d2d_command_list *command
+     d2d_command_list_set_text_rendering_params_internal(command_list, FALSE, params);
+ }
+ 
++/*
++    copies the stuff from src to data, and moves data over by size 
++    also sets dst to data somehow? TODO
++*/
+ static inline void d2d_command_list_write_field(BYTE **data, void *dst, const void *src, size_t size)
+ {
+     void **ptr = dst;
+@@ -1022,6 +1027,20 @@ void d2d_command_list_draw_bitmap(struct d2d_command_list *command_list, ID2D1Bi
+     d2d_command_list_write_field(&data, &command->perspective_transform, perspective_transform, sizeof(*perspective_transform));
+ }
+ 
++/**
++ * PARAMS
++ *  command_list        ?
++ *  image               The source image
++ *  target_offset       Where it will be drawn in the target
++ *  image_rect          What area of the image is to be copied
++ *  interpolation_mode  How to interpolate between pixels
++ *  composite_mode      How to paste the image onto the target
++ *
++ * BUGS
++ *  interpolation_mode is ignored
++ *  composite_mode is ignored
++ *
++ */
+ void d2d_command_list_draw_image(struct d2d_command_list *command_list, ID2D1Image *image,
+         const D2D1_POINT_2F *target_offset, const D2D1_RECT_F *image_rect, D2D1_INTERPOLATION_MODE interpolation_mode,
+         D2D1_COMPOSITE_MODE composite_mode)
+@@ -1030,6 +1049,14 @@ void d2d_command_list_draw_image(struct d2d_command_list *command_list, ID2D1Ima
+     size_t size;
+     BYTE *data;
+ 
++    if (composite_mode != D2D1_COMPOSITE_MODE_SOURCE_OVER &&
++        composite_mode != D2D1_COMPOSITE_MODE_BOUNDED_SOURCE_COPY)
++    {
++        FIXME("Unhandled composite mode %#x.\n", composite_mode);
++        SetLastError(ERROR_CALL_NOT_IMPLEMENTED);
++        return;
++    }
++
+     size = sizeof(*command);
+     if (target_offset) size += sizeof(*target_offset);
+     if (image_rect) size += sizeof(*image_rect);
