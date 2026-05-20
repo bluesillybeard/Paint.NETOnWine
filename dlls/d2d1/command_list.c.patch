@@ -1,5 +1,5 @@
 diff --git a/dlls/d2d1/command_list.c b/dlls/d2d1/command_list.c
-index 34242ddd88a..e80452a0fba 100644
+index 34242ddd88a..cfbfa419614 100644
 --- a/dlls/d2d1/command_list.c
 +++ b/dlls/d2d1/command_list.c
 @@ -17,6 +17,7 @@
@@ -53,18 +53,3 @@ index 34242ddd88a..e80452a0fba 100644
  void d2d_command_list_draw_image(struct d2d_command_list *command_list, ID2D1Image *image,
          const D2D1_POINT_2F *target_offset, const D2D1_RECT_F *image_rect, D2D1_INTERPOLATION_MODE interpolation_mode,
          D2D1_COMPOSITE_MODE composite_mode)
-@@ -1030,6 +1049,14 @@ void d2d_command_list_draw_image(struct d2d_command_list *command_list, ID2D1Ima
-     size_t size;
-     BYTE *data;
- 
-+    if (composite_mode != D2D1_COMPOSITE_MODE_SOURCE_OVER &&
-+        composite_mode != D2D1_COMPOSITE_MODE_BOUNDED_SOURCE_COPY)
-+    {
-+        FIXME("Unhandled composite mode %#x.\n", composite_mode);
-+        SetLastError(ERROR_CALL_NOT_IMPLEMENTED);
-+        return;
-+    }
-+
-     size = sizeof(*command);
-     if (target_offset) size += sizeof(*target_offset);
-     if (image_rect) size += sizeof(*image_rect);
