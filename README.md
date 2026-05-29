@@ -32,7 +32,7 @@ I highly suggest using a virtual machine or chroot environment to complete every
 
 The simplest way is to use the helper script: [[link](https://github.com/bluesillybeard/Paint.NETOnWine/blob/master/pdnhelper.sh)]. It has all of the instructions, encoded directly in the form of a CLI interface that does everything* more or less automatically. The script has instructions built-in, however this readme contains a more detailed guide.
 
-\* The helper script will not install the required dependencies automatucally, as that depends on what distro you are using - and can even be quite involved for certain dependencies.
+\* The helper script will not install the required dependencies automatically, as that depends on what distro you are using - and can even be quite involved for certain dependencies.
 
 ### Setting up using the helper script
 
