@@ -1,8 +1,19 @@
 diff --git a/dlls/dwrite/font.c b/dlls/dwrite/font.c
-index f207bade10e..403002d2999 100644
+index f207bade10e..ba6820ff128 100644
 --- a/dlls/dwrite/font.c
 +++ b/dlls/dwrite/font.c
-@@ -5831,6 +5831,29 @@ static ULONG WINAPI glyphrunanalysis_Release(IDWriteGlyphRunAnalysis *iface)
+@@ -3320,6 +3320,10 @@ static UINT32 collection_find_family(struct dwrite_fontcollection *collection, c
+ 
+     for (i = 0; i < collection->count; ++i)
+     {
++        if(collection->family_data[i] > 0x0000FFFFFFFFFFFF) {
++            FIXME("Hacky segfault fix. need to find the root cause\n");
++            continue;
++        }
+         IDWriteLocalizedStrings *family_name = collection->family_data[i]->familyname;
+         UINT32 j, count = IDWriteLocalizedStrings_GetCount(family_name);
+         HRESULT hr;
+@@ -5831,6 +5835,29 @@ static ULONG WINAPI glyphrunanalysis_Release(IDWriteGlyphRunAnalysis *iface)
      return refcount;
  }
  
@@ -32,7 +43,7 @@ index f207bade10e..403002d2999 100644
  static void glyphrunanalysis_get_texturebounds(struct dwrite_glyphrunanalysis *analysis, RECT *bounds)
  {
      struct dwrite_glyphbitmap glyph_bitmap;
-@@ -5862,7 +5885,7 @@ static void glyphrunanalysis_get_texturebounds(struct dwrite_glyphrunanalysis *a
+@@ -5862,7 +5889,7 @@ static void glyphrunanalysis_get_texturebounds(struct dwrite_glyphrunanalysis *a
          if (bitmap_size > analysis->max_glyph_bitmap_size)
              analysis->max_glyph_bitmap_size = bitmap_size;
  
