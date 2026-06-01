@@ -1,5 +1,5 @@
 diff --git a/dlls/user32/user32.spec b/dlls/user32/user32.spec
-index 40e80c69246..3424c93a614 100644
+index fe41f9cb2e7..b2f632a7203 100644
 --- a/dlls/user32/user32.spec
 +++ b/dlls/user32/user32.spec
 @@ -1108,7 +1108,7 @@
