@@ -18,6 +18,15 @@ It also relies on the Windows Animation Manager API (`UiAnimation.dll`), another
 
 It's going to be a long time before any of this is remotely ready for general use. However, the goal is to eventually get Paint.NET running more or less right out of the box with a standard up-to-date Wine installation.
 
+### What is the current overall progress?
+
+In general: check https://github.com/bluesillybeard/Paint.NETOnWine/issues to see tracked issues
+
+More precisely for specific Paint.NET versions:
+- For 4.3.12: able to run. most tools do not works or crash the application. render flickering & likely a lot of others
+- For 5.1.x: able to run. all the issues above + more issues, more notably a lot things render as black rectangle
+- For 5.2.x: crash on startup. 5.2 specific progress on the 5.2-fixes branch (especially since it is in beta at the time of writting)
+
 ### Will this project support MacOS?
 
 Wine itself does support MacOS, however we are not testing on MacOS for now. If you can test and debug on MacOS, that would be appreciated, even if it's just a confirmation that it does/doesn't work.
