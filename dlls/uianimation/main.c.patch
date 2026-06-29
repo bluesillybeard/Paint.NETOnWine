@@ -305,7 +305,7 @@ index 22bb58ddbe2..bb45b01a8c3 100644
  
 +static HRESULT animation_var_set_value(IUIAnimationVariable *iface, DOUBLE value) {
 +    struct animation_var *This = impl_from_IUIAnimationVariable( iface );
-+    
++
 +    This->previousValue = This->value;
 +
 +    This->value = value;
@@ -313,7 +313,7 @@ index 22bb58ddbe2..bb45b01a8c3 100644
 +    This->value = min(This->upperBound, This->value);
 +
 +    //Only call change handlers if the value actually changes
-+    if(This->previousValue != This->value){ 
++    if(This->previousValue != This->value){
 +        if(This->changeHandler != NULL) {
 +            FIXME( "animation var change handlers not implemented! (%p), value = %f\n", This, value);
 +            return E_NOTIMPL;
@@ -378,7 +378,7 @@ index 22bb58ddbe2..bb45b01a8c3 100644
      struct manager *This = impl_from_IUIAnimationManager( iface );
 -    FIXME( "stub (%p)->(%p)\n", This, status );
 +    if(This->globalAnimationMode == UI_ANIMATION_MODE_DISABLED){
-+        *status = UI_ANIMATION_MANAGER_IDLE; 
++        *status = UI_ANIMATION_MANAGER_IDLE;
 +        return S_OK;
 +    }
 +    *status = UI_ANIMATION_MANAGER_IDLE;
@@ -392,11 +392,11 @@ index 22bb58ddbe2..bb45b01a8c3 100644
 -    FIXME( "stub (%p)->(%d)\n", This, mode );
 -    return S_OK;
 +    TRACE("%p -> (%d)", This, mode);
-+    if(mode == UI_ANIMATION_MODE_DISABLED){ 
++    if(mode == UI_ANIMATION_MODE_DISABLED){
 +        This->globalAnimationMode = UI_ANIMATION_MODE_DISABLED;
 +        return S_OK;
 +    }
-+    if(mode == UI_ANIMATION_MODE_SYSTEM_DEFAULT) { 
++    if(mode == UI_ANIMATION_MODE_SYSTEM_DEFAULT) {
 +        This->globalAnimationMode = UI_ANIMATION_MODE_DISABLED;
 +        WARN("UiAnimation Enabled Animation Mode not supported, defaulting to disabled!\n");
 +        return S_OK;
@@ -537,7 +537,7 @@ index 22bb58ddbe2..bb45b01a8c3 100644
 +    return ref;
 +}
 +
-+static HRESULT WINAPI SetInitialValue ( IUIAnimationTransition *iface, DOUBLE value ) 
++static HRESULT WINAPI SetInitialValue ( IUIAnimationTransition *iface, DOUBLE value )
 +{
 +    struct transition *This = impl_from_IUIAnimationTransition( iface );
 +    FIXME( "stub (%p)->(%f)\n", This, value );
@@ -612,7 +612,7 @@ index 22bb58ddbe2..bb45b01a8c3 100644
 +    HRESULT hr;
      FIXME( "stub (%p)->(%f, %p)\n", This, finalValue, transition );
 -    return E_NOTIMPL;
-+    hr = transition_create(finalValue, transition); 
++    hr = transition_create(finalValue, transition);
 +    return hr;
  }
  
@@ -634,7 +634,7 @@ index 22bb58ddbe2..bb45b01a8c3 100644
 +    HRESULT hr;
      FIXME( "stub (%p)->(  )\n", This );
 -    return E_NOTIMPL;
-+    hr = transition_create(finalValue, transition); 
++    hr = transition_create(finalValue, transition);
 +    return hr;
  }
  
@@ -645,7 +645,7 @@ index 22bb58ddbe2..bb45b01a8c3 100644
 +    HRESULT hr;
      FIXME( "stub (%p)->(%f, %f, %p)\n", This, duration, finalValue, transition );
 -    return E_NOTIMPL;
-+    hr = transition_create(finalValue, transition); 
++    hr = transition_create(finalValue, transition);
 +    return hr;
  }
  
@@ -656,7 +656,7 @@ index 22bb58ddbe2..bb45b01a8c3 100644
 +    HRESULT hr;
      FIXME( "stub (%p)->(%f, %f, %p)\n", This, speed, finalValue, transition );
 -    return E_NOTIMPL;
-+    hr = transition_create(finalValue, transition); 
++    hr = transition_create(finalValue, transition);
 +    return hr;
  }
  
@@ -681,7 +681,7 @@ index 22bb58ddbe2..bb45b01a8c3 100644
      FIXME( "stub (%p)->(%f, %f, %f, %f, %d, %p)\n", This, duration, minimumValue, maximumValue, period, slope, transition );
 -    return E_NOTIMPL;
 +    finalValue = slope == UI_ANIMATION_SLOPE_INCREASING ? maximumValue : minimumValue;
-+    hr = transition_create(finalValue, transition); 
++    hr = transition_create(finalValue, transition);
 +    return hr;
  }
  
@@ -693,7 +693,7 @@ index 22bb58ddbe2..bb45b01a8c3 100644
 +    HRESULT hr;
      FIXME( "stub (%p)->(%f, %f, %f, %f, %p)\n", This, duration, finalValue, accelerationRatio, decelerationRatio, transition );
 -    return E_NOTIMPL;
-+    hr = transition_create(finalValue, transition); 
++    hr = transition_create(finalValue, transition);
 +    return hr;
  }
  
@@ -715,7 +715,7 @@ index 22bb58ddbe2..bb45b01a8c3 100644
 +    HRESULT hr;
      FIXME( "stub (%p)->(%f, %f, %f, %p)\n", This, duration, finalValue, finalVelocity, transition );
 -    return E_NOTIMPL;
-+    hr = transition_create(finalValue, transition); 
++    hr = transition_create(finalValue, transition);
 +    return hr;
  }
  
@@ -726,7 +726,7 @@ index 22bb58ddbe2..bb45b01a8c3 100644
 +    HRESULT hr;
      FIXME( "stub (%p)->(%f, %f, %p)\n", This, maximumDuration, finalValue, transition );
 -    return E_NOTIMPL;
-+    hr = transition_create(finalValue, transition); 
++    hr = transition_create(finalValue, transition);
 +    return hr;
  }
  
@@ -737,7 +737,7 @@ index 22bb58ddbe2..bb45b01a8c3 100644
 +    HRESULT hr;
      FIXME( "stub (%p)->(  )\n", This );
 -    return E_NOTIMPL;
-+    hr = transition_create(finalValue, transition); 
++    hr = transition_create(finalValue, transition);
 +    return hr;
  }
  

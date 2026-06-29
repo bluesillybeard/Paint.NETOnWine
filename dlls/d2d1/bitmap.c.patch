@@ -11,7 +11,7 @@ index c6ab60c1bc4..1df65c768dc 100644
 +        FIXME("IID_IWICBitmapLock probably isn't implemented correctly\n");
 +        return d2d_bitmap_create_from_wic_bitmap_lock(context, data, desc, bitmap);
 +        // return E_NOINTERFACE;
-+        
++
 +    }
 +
      WARN("Unhandled interface %s.\n", debugstr_guid(iid));
