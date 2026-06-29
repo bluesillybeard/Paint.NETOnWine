@@ -1,5 +1,5 @@
 diff --git a/dlls/d2d1/bitmap.c b/dlls/d2d1/bitmap.c
-index c6ab60c1bc4..1df65c768dc 100644
+index c6ab60c1bc4..bb1678c23fe 100644
 --- a/dlls/d2d1/bitmap.c
 +++ b/dlls/d2d1/bitmap.c
 @@ -680,11 +680,122 @@ HRESULT d2d_bitmap_create_shared(struct d2d_device_context *context, REFIID iid,
