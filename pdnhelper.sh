@@ -22,11 +22,6 @@ page=1
 
 fi # page is set
 
-if test $page == "setup"; then # help page
-
-echo "the 'setup' command runs the download, applypatch, configure, and createprefix commands"
-echo "Use this command to set everything up for building WINE for $patchRepo automatically"
-
 elif test $page == "makescripts"; then # help page
 
 echo "the 'makescripts' command creates 'wine' and 'winetricks' wrappers that automatically set the prefix"
@@ -70,7 +65,6 @@ echo "Usage: $0 [command] [arguments]"
 echo "Commands:"
 echo "    help          - prints this help message. You can use help [command] to get more info about a specific command."
 echo "    guide         - prints out a full setup guide"
-echo "    setup         - runs the download, makescripts, applypatch, configure, make, and createprefix commands"
 echo "    makescripts   - Makes 'winetricks' and 'wine' wrapper scripts to automatically call them with the correct prefix"
 echo "    download      - downloads wine and patches from git repos"
 echo "    applypatch    - applies patches to wine"
@@ -79,7 +73,6 @@ echo "    configure-wow - configure a 64bit wine build"
 echo "    createprefix  - configure wine prefix"
 echo "    make          - runs make install in order to build wine"
 echo "    makepatch     - create the patches to submit to the $patchRepo repo"
-echo "For most users, simply run the 'setup' command"
 echo "Also, take a look at the 'wine' and 'winetricks' scripts"
 
 fi # help page
