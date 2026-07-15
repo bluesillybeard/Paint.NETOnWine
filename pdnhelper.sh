@@ -22,11 +22,6 @@ page=1
 
 fi # page is set
 
-if test $page == "setup"; then # help page
-
-echo "the 'setup' command runs the download, applypatch, configure, and createprefix commands"
-echo "Use this command to set everything up for building WINE for $patchRepo automatically"
-
 elif test $page == "makescripts"; then # help page
 
 echo "the 'makescripts' command creates 'wine' and 'winetricks' wrappers that automatically set the prefix"
@@ -39,10 +34,13 @@ elif test $page == "applypatch"; then # help page
 
 echo "the 'applypatch' command applies the patches from $patchRepo to the WINE source code."
 echo "Note, that this will reset any changes you have made to WINE itself!"
-
 elif test $page == "configure"; then # help page
 
-echo "the 'configure' command configures WINEs makefile"
+echo "the 'configure' command configures WINEs makefile for a 64bit build"
+
+elif test $page == "configure-wow"; then # help page
+
+echo "the 'configure-wow' command configures WINEs makefile for a wow64 build"
 
 elif test $page == "createprefix"; then # help page
 
@@ -65,17 +63,16 @@ else # help page
 
 echo "Usage: $0 [command] [arguments]"
 echo "Commands:"
-echo "    help         - prints this help message. You can use help [command] to get more info about a specific command."
-echo "    guide        - prints out a full setup guide"
-echo "    setup        - runs the download, makescripts, applypatch, configure, make, and createprefix commands"
-echo "    makescripts  - Makes 'winetricks' and 'wine' wrapper scripts to automatically call them with the correct prefix"
-echo "    download     - downloads wine and patches from git repos"
-echo "    applypatch   - applies patches to wine"
-echo "    configure    - configure wine build"
-echo "    createprefix - configure wine prefix"
-echo "    make         - runs make install in order to build wine"
-echo "    makepatch    - create the patches to submit to the $patchRepo repo"
-echo "For most users, simply run the 'setup' command"
+echo "    help          - prints this help message. You can use help [command] to get more info about a specific command."
+echo "    guide         - prints out a full setup guide"
+echo "    makescripts   - Makes 'winetricks' and 'wine' wrapper scripts to automatically call them with the correct prefix"
+echo "    download      - downloads wine and patches from git repos"
+echo "    applypatch    - applies patches to wine"
+echo "    configure     - configure a 64bit wine build"
+echo "    configure-wow - configure a 64bit wine build"
+echo "    createprefix  - configure wine prefix"
+echo "    make          - runs make install in order to build wine"
+echo "    makepatch     - create the patches to submit to the $patchRepo repo"
 echo "Also, take a look at the 'wine' and 'winetricks' scripts"
 
 fi # help page
@@ -135,6 +132,13 @@ cd build
 ../$sourceRepo/configure --enable-win64 --prefix=$PWD/install
 cd ..
 
+elif test $command == "configure-wow"; then # command
+
+mkdir -p ./build
+cd build
+../$sourceRepo/configure --enable-archs=i386,x86_64 --prefix=$PWD/install
+cd ..
+
 elif test $command == "make"; then # command
 
 cd build
@@ -147,6 +151,7 @@ elif test $command == "createprefix"; then # command
 ./winetricks win10
 
 # Hack to fix a bug in winetricks
+# Should fail on wow64 as already exist
 ln -s $PWD/prefix/drive_c/windows/regedit.exe $PWD/prefix/drive_c/windows/syswow64/
 
 ./winetricks arial calibri corefonts
