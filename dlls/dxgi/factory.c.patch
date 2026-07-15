@@ -1,8 +1,8 @@
 diff --git a/dlls/dxgi/factory.c b/dlls/dxgi/factory.c
-index ebdb42a3806..1879099c5b2 100644
+index 7837bffaca3..7bc23a79dfc 100644
 --- a/dlls/dxgi/factory.c
 +++ b/dlls/dxgi/factory.c
-@@ -439,9 +439,14 @@ static HRESULT STDMETHODCALLTYPE dxgi_factory_EnumAdapterByLuid(IWineDXGIFactory
+@@ -448,9 +448,14 @@ static HRESULT STDMETHODCALLTYPE dxgi_factory_EnumAdapterByLuid(IWineDXGIFactory
  static HRESULT STDMETHODCALLTYPE dxgi_factory_EnumWarpAdapter(IWineDXGIFactory *iface,
          REFIID iid, void **adapter)
  {

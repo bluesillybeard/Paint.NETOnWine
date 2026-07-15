@@ -1,5 +1,5 @@
 diff --git a/dlls/windowscodecs/info.c b/dlls/windowscodecs/info.c
-index 4063196e27c..1684a8683f7 100644
+index 4063196e27c..ed2f67fefd9 100644
 --- a/dlls/windowscodecs/info.c
 +++ b/dlls/windowscodecs/info.c
 @@ -1331,11 +1331,44 @@ static HRESULT WINAPI PixelFormatInfo_GetFormatGUID(IWICPixelFormatInfo2 *iface,
@@ -8,7 +8,7 @@ index 4063196e27c..1684a8683f7 100644
  
 +//FIXME
 +//this is from https://github.com/saucecontrol/Compact-ICC-Profiles?tab=readme-ov-file and NEEDS TO BE REPLACED WITH REAL CODE
-+static byte TEMP_COLOR_PROFILE[] = {  
++static byte TEMP_COLOR_PROFILE[] = {
 +    0x00, 0x00, 0x01, 0x22, 0x6c, 0x63, 0x6d, 0x73, 0x02, 0x10, 0x00, 0x00,
 +  0x6d, 0x6e, 0x74, 0x72, 0x47, 0x52, 0x41, 0x59, 0x58, 0x59, 0x5a, 0x20,
 +  0x07, 0xe2, 0x00, 0x03, 0x00, 0x14, 0x00, 0x09, 0x00, 0x0e, 0x00, 0x1d,

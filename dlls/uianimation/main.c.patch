@@ -1,5 +1,5 @@
 diff --git a/dlls/uianimation/main.c b/dlls/uianimation/main.c
-index 22bb58ddbe2..4570f88da85 100644
+index 22bb58ddbe2..62f2bc06e05 100644
 --- a/dlls/uianimation/main.c
 +++ b/dlls/uianimation/main.c
 @@ -27,6 +27,8 @@
@@ -176,7 +176,7 @@ index 22bb58ddbe2..4570f88da85 100644
 +    *status = 0;
 +    return S_OK;
  }
-
+ 
  static HRESULT WINAPI animation_storyboard_GetElapsedTime (IUIAnimationStoryboard *iface,  UI_ANIMATION_SECONDS *elapsed)
 @@ -312,6 +371,9 @@ static HRESULT animation_storyboard_create( IUIAnimationStoryboard **obj )
      if (!This) return E_OUTOFMEMORY;
