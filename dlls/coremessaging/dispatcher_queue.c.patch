@@ -4,9 +4,9 @@ index 00000000000..d3f075244f7
 --- /dev/null
 +++ b/dlls/coremessaging/dispatcher_queue.c
 @@ -0,0 +1,296 @@
-+/* 
++/*
 + *
-+ * Copyright (C) 
++ * Copyright (C)
 + *
 + * This library is free software; you can redistribute it and/or
 + * modify it under the terms of the GNU Lesser General Public
@@ -52,7 +52,7 @@ index 00000000000..d3f075244f7
 +    //TODO, we dont actually implement DispatcherQueue2, we just say we do
 +    if (IsEqualIID( iid, &IID_IUnknown ) ||
 +        IsEqualIID( iid, &IID_IInspectable) ||
-+        IsEqualIID( iid, &IID_IDispatcherQueue ) ||  
++        IsEqualIID( iid, &IID_IDispatcherQueue ) ||
 +        IsEqualIID( iid, &IID_IDispatcherQueue2 ))
 +    {
 +        IDispatcherQueue_AddRef( iface );

@@ -1,8 +1,8 @@
 diff --git a/dlls/d3dcompiler_43/reflection.c b/dlls/d3dcompiler_43/reflection.c
-index 21b367f5002..e6a9cb0f409 100644
+index 182b3c99b63..e344a1db290 100644
 --- a/dlls/d3dcompiler_43/reflection.c
 +++ b/dlls/d3dcompiler_43/reflection.c
-@@ -701,8 +701,8 @@ static HRESULT STDMETHODCALLTYPE d3dcompiler_shader_reflection_GetMinFeatureLeve
+@@ -668,8 +668,8 @@ static HRESULT STDMETHODCALLTYPE d3dcompiler_shader_reflection_GetMinFeatureLeve
          ID3D11ShaderReflection *iface, D3D_FEATURE_LEVEL *level)
  {
      FIXME("iface %p, level %p stub!\n", iface, level);

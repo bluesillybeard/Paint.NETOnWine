@@ -1,5 +1,5 @@
 diff --git a/dlls/d2d1/device.c b/dlls/d2d1/device.c
-index b3560f09c12..4bea9354fdd 100644
+index b3560f09c12..47ec17b4c16 100644
 --- a/dlls/d2d1/device.c
 +++ b/dlls/d2d1/device.c
 @@ -2199,13 +2199,196 @@ static HRESULT STDMETHODCALLTYPE d2d_device_context_ID2D1DeviceContext_CreateBit
@@ -26,7 +26,7 @@ index b3560f09c12..4bea9354fdd 100644
 +
 +//FIXME
 +//this is from https://github.com/saucecontrol/Compact-ICC-Profiles?tab=readme-ov-file and NEEDS TO BE REPLACED WITH REAL CODE
-+static byte TEMP_COLOR_PROFILE[] = {  
++static byte TEMP_COLOR_PROFILE[] = {
 +    0x00, 0x00, 0x01, 0x22, 0x6c, 0x63, 0x6d, 0x73, 0x02, 0x10, 0x00, 0x00,
 +  0x6d, 0x6e, 0x74, 0x72, 0x47, 0x52, 0x41, 0x59, 0x58, 0x59, 0x5a, 0x20,
 +  0x07, 0xe2, 0x00, 0x03, 0x00, 0x14, 0x00, 0x09, 0x00, 0x0e, 0x00, 0x1d,
@@ -176,7 +176,7 @@ index b3560f09c12..4bea9354fdd 100644
 +        return E_OUTOFMEMORY;
 +    This->ID2D1ColorContext1_iface.lpVtbl = &d2d_color_context_vtbl;
 +    This->ref = 1;
-+    This->contextSize = sizeof(TEMP_COLOR_PROFILE); 
++    This->contextSize = sizeof(TEMP_COLOR_PROFILE);
 +    memset(This->colorContext, 0, sizeof(TEMP_COLOR_PROFILE));
 +    This->factory = factory;
 +
