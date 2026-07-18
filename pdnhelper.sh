@@ -22,7 +22,7 @@ page=1
 
 fi # page is set
 
-elif test $page == "makescripts"; then # help page
+if test $page == "makescripts"; then # help page
 
 echo "the 'makescripts' command creates 'wine' and 'winetricks' wrappers that automatically set the prefix"
 
