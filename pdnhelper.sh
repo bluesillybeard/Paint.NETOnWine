@@ -6,51 +6,51 @@ sourceRepo=winesrc
 
 command=$1
 
-if test ! $command; then # command is set
+if test ! "$command"; then # command is set
 
 command="help"
 
 fi # command is set
 
-if test $command == "help"; then # command
+if test "$command" == "help"; then # command
 
 page=$2
 
-if test ! $page; then # page is set
+if test ! "$page"; then # page is set
 
 page=1
 
 fi # page is set
 
-if test $page == "makescripts"; then # help page
+if test "$page" == "makescripts"; then # help page
 
 echo "the 'makescripts' command creates 'wine' and 'winetricks' wrappers that automatically set the prefix"
 
-elif test $page == "download"; then # help page
+elif test "$page" == "download"; then # help page
 
 echo "the 'download' commmand downloads wine from the wine gitlab, and downloads the $patchRepo patches"
 
-elif test $page == "applypatch"; then # help page
+elif test "$page" == "applypatch"; then # help page
 
 echo "the 'applypatch' command applies the patches from $patchRepo to the WINE source code."
 echo "Note, that this will reset any changes you have made to WINE itself!"
-elif test $page == "configure"; then # help page
+elif test "$page" == "configure"; then # help page
 
 echo "the 'configure' command configures WINEs makefile for a 64bit build"
 
-elif test $page == "configure-wow"; then # help page
+elif test "$page" == "configure-wow"; then # help page
 
 echo "the 'configure-wow' command configures WINEs makefile for a wow64 build"
 
-elif test $page == "createprefix"; then # help page
+elif test "$page" == "createprefix"; then # help page
 
 echo "the 'creapteprefix' command sets up the wine prefix for testing paint.net"
 
-elif test $page == "make"; then # help page
+elif test "$page" == "make"; then # help page
 
 echo "the 'make' command runs the makefile in order to build WINE"
 
-elif test $page == "makepatch"; then # help page
+elif test "$page" == "makepatch"; then # help page
 
 echo "the 'makepatch' command generates the patche files based on the working changes in the WINE git folter"
 echo "This actually deletes the old patches, then iterates over every file in the WINE repo and does the following: "
@@ -77,7 +77,7 @@ echo "Also, take a look at the 'wine' and 'winetricks' scripts"
 
 fi # help page
 
-elif test $command == "guide"; then # command
+elif test "$command" == "guide"; then # command
 
 echo ""
 echo "Basic guide on setting up PDN on wine"
@@ -96,7 +96,7 @@ echo ""
 echo "After editing the source code, you only need to run '$0 make' to rebuild WINE with the new source code changes."
 echo "To update your local copy of the patches repo, run '$0 makepatch'."
 
-elif test $command == "makescripts"; then # command
+elif test "$command" == "makescripts"; then # command
 
 echo $'#!/bin/bash\nWINEPREFIX=\"$PWD/prefix" $PWD/build/install/bin/wine $@' > wine
 chmod +x wine
@@ -107,12 +107,12 @@ chmod +x winetricks
 echo $'#!/bin/bash\nWINE=\"$PWD/build/install/bin/wine\" WINEPREFIX=\"$PWD/prefix" $PWD/build/install/bin/winecfg $@' > winecfg
 chmod +x winecfg
 
-elif test $command == "download"; then # command
+elif test "$command" == "download"; then # command
 
 git clone https://gitlab.winehq.org/wine/wine.git $sourceRepo
 git clone https://github.com/bluesillybeard/Paint.NETOnWine.git $patchRepo
 
-elif test $command == "applypatch"; then # command
+elif test "$command" == "applypatch"; then # command
 
 # Clear out any working changes (this is what makes applypatch a bit dangerous!)
 # There is definitely a better way to also remove untracked files
@@ -125,7 +125,7 @@ git apply --directory $sourceRepo $patchfile
 
 done # loop over patch files
 
-elif test $command == "configure"; then # command
+elif test "$command" == "configure"; then # command
 
 mkdir -p ./build
 cd build
@@ -139,13 +139,13 @@ cd build
 ../$sourceRepo/configure --enable-archs=i386,x86_64 --prefix=$PWD/install
 cd ..
 
-elif test $command == "make"; then # command
+elif test "$command" == "make"; then # command
 
 cd build
 make install -j$(nproc)
 cd ..
 
-elif test $command == "createprefix"; then # command
+elif test "$command" == "createprefix"; then # command
 
 # This does the initial prefix creation and sets it to windows 10
 ./winetricks win10
@@ -157,7 +157,7 @@ ln -s $PWD/prefix/drive_c/windows/regedit.exe $PWD/prefix/drive_c/windows/syswow
 ./winetricks arial calibri corefonts
 ./winetricks dxvk
 
-elif test $command == "makepatch"; then # command
+elif test "$command" == "makepatch"; then # command
 
 git -C $sourceRepo ls-files -mo | sort | while read -r srcfile; do # Loop over wine source files
 
