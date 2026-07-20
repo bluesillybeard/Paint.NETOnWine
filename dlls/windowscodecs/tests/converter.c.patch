@@ -1,5 +1,5 @@
 diff --git a/dlls/windowscodecs/tests/converter.c b/dlls/windowscodecs/tests/converter.c
-index d85ae579d3b..bc4577b0ae2 100644
+index d85ae579d3b..d7276bfc2c3 100644
 --- a/dlls/windowscodecs/tests/converter.c
 +++ b/dlls/windowscodecs/tests/converter.c
 @@ -884,7 +884,7 @@ static void test_can_convert(void)
@@ -7,7 +7,7 @@ index d85ae579d3b..bc4577b0ae2 100644
          {WIC_PIXEL_FORMAT(64bppRGBA), TRUE, TRUE, 31},
          {WIC_PIXEL_FORMAT(64bppBGRA), TRUE, TRUE, 35, TRUE},
 -        {WIC_PIXEL_FORMAT(64bppPRGBA), TRUE, TRUE, 35},
-+        {WIC_PIXEL_FORMAT(64bppPRGBA), TRUE, TRUE, 31},
++        {WIC_PIXEL_FORMAT(64bppPRGBA), TRUE, TRUE, 32},
          {WIC_PIXEL_FORMAT(64bppPBGRA), TRUE, TRUE, 35, TRUE},
  
          {WIC_PIXEL_FORMAT(16bppGrayFixedPoint)},
