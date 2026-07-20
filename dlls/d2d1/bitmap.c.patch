@@ -1,8 +1,8 @@
 diff --git a/dlls/d2d1/bitmap.c b/dlls/d2d1/bitmap.c
-index c6ab60c1bc4..bb1678c23fe 100644
+index c6ab60c1bc4..a2527a4bbf4 100644
 --- a/dlls/d2d1/bitmap.c
 +++ b/dlls/d2d1/bitmap.c
-@@ -680,11 +680,122 @@ HRESULT d2d_bitmap_create_shared(struct d2d_device_context *context, REFIID iid,
+@@ -680,11 +680,123 @@ HRESULT d2d_bitmap_create_shared(struct d2d_device_context *context, REFIID iid,
          return S_OK;
      }
  
@@ -44,6 +44,7 @@ index c6ab60c1bc4..bb1678c23fe 100644
 +        {&GUID_WICPixelFormat32bppBGR,   {DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_IGNORE}},
 +        {&GUID_WICPixelFormat32bppRGB,   {DXGI_FORMAT_R8G8B8A8_UNORM, D2D1_ALPHA_MODE_IGNORE}},
 +        {&GUID_WICPixelFormat8bppAlpha,  {DXGI_FORMAT_A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED}},
++        {&GUID_WICPixelFormat64bppPRGBAHalf, {DXGI_FORMAT_R16G16B16A16_FLOAT, D2D1_ALPHA_MODE_PREMULTIPLIED}},
 +    };
 +
 +    if (FAILED(hr = IWICBitmapLock_GetSize(bitmap_lock, &size.width, &size.height)))
@@ -125,15 +126,16 @@ index c6ab60c1bc4..bb1678c23fe 100644
  HRESULT d2d_bitmap_create_from_wic_bitmap(struct d2d_device_context *context, IWICBitmapSource *bitmap_source,
          const D2D1_BITMAP_PROPERTIES1 *desc, struct d2d_bitmap **bitmap)
  {
-@@ -710,6 +821,7 @@ HRESULT d2d_bitmap_create_from_wic_bitmap(struct d2d_device_context *context, IW
+@@ -710,6 +822,8 @@ HRESULT d2d_bitmap_create_from_wic_bitmap(struct d2d_device_context *context, IW
          {&GUID_WICPixelFormat32bppPRGBA, {DXGI_FORMAT_R8G8B8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED}},
          {&GUID_WICPixelFormat32bppBGR,   {DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_IGNORE}},
          {&GUID_WICPixelFormat32bppRGB,   {DXGI_FORMAT_R8G8B8A8_UNORM, D2D1_ALPHA_MODE_IGNORE}},
 +        {&GUID_WICPixelFormat8bppAlpha,  {DXGI_FORMAT_A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED}},
++        {&GUID_WICPixelFormat64bppPRGBAHalf, {DXGI_FORMAT_R16G16B16A16_FLOAT, D2D1_ALPHA_MODE_PREMULTIPLIED}},
      };
  
      if (FAILED(hr = IWICBitmapSource_GetSize(bitmap_source, &size.width, &size.height)))
-@@ -742,6 +854,7 @@ HRESULT d2d_bitmap_create_from_wic_bitmap(struct d2d_device_context *context, IW
+@@ -742,6 +856,7 @@ HRESULT d2d_bitmap_create_from_wic_bitmap(struct d2d_device_context *context, IW
      {
          if (IsEqualGUID(&wic_format, format_lookup[i].wic))
          {
@@ -141,7 +143,7 @@ index c6ab60c1bc4..bb1678c23fe 100644
              d2d_format = &format_lookup[i].d2d;
              break;
          }
-@@ -750,7 +863,8 @@ HRESULT d2d_bitmap_create_from_wic_bitmap(struct d2d_device_context *context, IW
+@@ -750,7 +865,8 @@ HRESULT d2d_bitmap_create_from_wic_bitmap(struct d2d_device_context *context, IW
      if (!d2d_format)
      {
          WARN("Unsupported WIC bitmap format %s.\n", debugstr_guid(&wic_format));
@@ -151,7 +153,15 @@ index c6ab60c1bc4..bb1678c23fe 100644
      }
  
      if (bitmap_desc.pixelFormat.format == DXGI_FORMAT_UNKNOWN)
-@@ -764,6 +878,9 @@ HRESULT d2d_bitmap_create_from_wic_bitmap(struct d2d_device_context *context, IW
+@@ -760,10 +876,17 @@ HRESULT d2d_bitmap_create_from_wic_bitmap(struct d2d_device_context *context, IW
+ 
+     switch (bitmap_desc.pixelFormat.format)
+     {
++        case DXGI_FORMAT_R16G16B16A16_FLOAT:
++        case DXGI_FORMAT_R16G16B16A16_UNORM:
++            bpp = 8;
++            break;
+         case DXGI_FORMAT_B8G8R8A8_UNORM:
          case DXGI_FORMAT_R8G8B8A8_UNORM:
              bpp = 4;
              break;
