@@ -1,8 +1,8 @@
 diff --git a/dlls/windowscodecs/converter.c b/dlls/windowscodecs/converter.c
-index 1783e0eb7ac..c9133d0480a 100644
+index 1783e0eb7ac..dc7f938cc0c 100644
 --- a/dlls/windowscodecs/converter.c
 +++ b/dlls/windowscodecs/converter.c
-@@ -2253,6 +2253,90 @@ static HRESULT copypixels_to_64bppRGBA(struct FormatConverter *This, const WICRe
+@@ -2253,6 +2253,93 @@ static HRESULT copypixels_to_64bppRGBA(struct FormatConverter *This, const WICRe
      }
  }
  
@@ -61,7 +61,7 @@ index 1783e0eb7ac..c9133d0480a 100644
 +        return hr;
 +    }
 +    case format_64bppRGBA:
-+    default:
++    case format_32bppBGRA:
 +        WORD *dstpixel;
 +        BYTE *dstrow;
 +        INT x, y;
@@ -87,13 +87,16 @@ index 1783e0eb7ac..c9133d0480a 100644
 +            }
 +        }
 +        return hr;
++    default:
++        FIXME("Unimplemented conversion path %d.\n", source_format);
++        return WINCODEC_ERR_UNSUPPORTEDOPERATION;
 +    }
 +}
 +
  static HRESULT copypixels_to_128bppRGBAFloat(struct FormatConverter *This, const WICRect *prc,
      UINT cbStride, UINT cbBufferSize, BYTE *pbBuffer, enum pixelformat source_format)
  {
-@@ -2356,6 +2440,68 @@ static HRESULT copypixels_to_128bppRGBAFloat(struct FormatConverter *This, const
+@@ -2356,6 +2443,68 @@ static HRESULT copypixels_to_128bppRGBAFloat(struct FormatConverter *This, const
      }
  }
  
@@ -162,7 +165,7 @@ index 1783e0eb7ac..c9133d0480a 100644
  static HRESULT copypixels_to_128bppRGBFloat(struct FormatConverter *This, const WICRect *prc,
      UINT cbStride, UINT cbBufferSize, BYTE *pbBuffer, enum pixelformat source_format)
  {
-@@ -2574,12 +2720,12 @@ static const struct pixelformatinfo supported_formats[] = {
+@@ -2574,12 +2723,12 @@ static const struct pixelformatinfo supported_formats[] = {
      {format_48bppBGR, &GUID_WICPixelFormat48bppBGR, NULL},
      {format_64bppRGB, &GUID_WICPixelFormat64bppRGB, NULL},
      {format_64bppBGRA, &GUID_WICPixelFormat64bppBGRA, NULL},
