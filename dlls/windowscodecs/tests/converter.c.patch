@@ -1,0 +1,22 @@
+diff --git a/dlls/windowscodecs/tests/converter.c b/dlls/windowscodecs/tests/converter.c
+index d85ae579d3b..bc4577b0ae2 100644
+--- a/dlls/windowscodecs/tests/converter.c
++++ b/dlls/windowscodecs/tests/converter.c
+@@ -884,7 +884,7 @@ static void test_can_convert(void)
+         {WIC_PIXEL_FORMAT(64bppRGB), TRUE, TRUE, 35, TRUE},
+         {WIC_PIXEL_FORMAT(64bppRGBA), TRUE, TRUE, 31},
+         {WIC_PIXEL_FORMAT(64bppBGRA), TRUE, TRUE, 35, TRUE},
+-        {WIC_PIXEL_FORMAT(64bppPRGBA), TRUE, TRUE, 35},
++        {WIC_PIXEL_FORMAT(64bppPRGBA), TRUE, TRUE, 31},
+         {WIC_PIXEL_FORMAT(64bppPBGRA), TRUE, TRUE, 35, TRUE},
+ 
+         {WIC_PIXEL_FORMAT(16bppGrayFixedPoint)},
+@@ -894,7 +894,7 @@ static void test_can_convert(void)
+         {WIC_PIXEL_FORMAT(96bppRGBFixedPoint)},
+         {WIC_PIXEL_FORMAT(96bppRGBFloat), TRUE, TRUE, 35, TRUE},
+         {WIC_PIXEL_FORMAT(128bppRGBAFloat), TRUE, TRUE, 33},
+-        {WIC_PIXEL_FORMAT(128bppPRGBAFloat), TRUE, TRUE, 35},
++        {WIC_PIXEL_FORMAT(128bppPRGBAFloat), TRUE, TRUE, 33},
+         {WIC_PIXEL_FORMAT(128bppRGBFloat), TRUE, TRUE, 33},
+ 
+         {WIC_PIXEL_FORMAT(32bppCMYK)},
