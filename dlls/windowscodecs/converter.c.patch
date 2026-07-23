@@ -1,5 +1,5 @@
 diff --git a/dlls/windowscodecs/converter.c b/dlls/windowscodecs/converter.c
-index 1783e0eb7ac..77f4dedcd55 100644
+index 1783e0eb7ac..dfdb7839ab9 100644
 --- a/dlls/windowscodecs/converter.c
 +++ b/dlls/windowscodecs/converter.c
 @@ -2253,6 +2253,52 @@ static HRESULT copypixels_to_64bppRGBA(struct FormatConverter *This, const WICRe
@@ -45,7 +45,7 @@ index 1783e0eb7ac..77f4dedcd55 100644
 +        return hr;
 +    }
 +    default:
-+ 	{
++    {
 +        FIXME("Unimplemented conversion path %d.\n", source_format);
 +        return WINCODEC_ERR_UNSUPPORTEDOPERATION;
 +    }
@@ -55,25 +55,14 @@ index 1783e0eb7ac..77f4dedcd55 100644
  static HRESULT copypixels_to_128bppRGBAFloat(struct FormatConverter *This, const WICRect *prc,
      UINT cbStride, UINT cbBufferSize, BYTE *pbBuffer, enum pixelformat source_format)
  {
-@@ -2356,6 +2402,68 @@ static HRESULT copypixels_to_128bppRGBAFloat(struct FormatConverter *This, const
+@@ -2350,6 +2396,104 @@ static HRESULT copypixels_to_128bppRGBAFloat(struct FormatConverter *This, const
+         free(srcdata);
+         return hr;
      }
- }
- 
-+static HRESULT copypixels_to_128bppPRGBAFloat(struct FormatConverter *This, const WICRect *prc,
-+    UINT cbStride, UINT cbBufferSize, BYTE *pbBuffer, enum pixelformat source_format)
-+{
-+    HRESULT hr;
-+
-+    switch (source_format)
-+    {
-+    case format_128bppPRGBAFloat:
-+        if (prc)
-+            return IWICBitmapSource_CopyPixels(This->source, prc, cbStride, cbBufferSize, pbBuffer);
-+        return S_OK;
 +    case format_64bppPRGBA:
 +    {
 +        UINT srcstride, srcdatasize;
-+        const BYTE *srcpixel;
++        const WORD *srcpixel;
 +        const BYTE *srcrow;
 +        float *dstpixel;
 +        BYTE *srcdata;
@@ -96,16 +85,26 @@ index 1783e0eb7ac..77f4dedcd55 100644
 +            dstrow = pbBuffer;
 +            for (y = 0; y < prc->Height; y++)
 +            {
-+                srcpixel = srcrow;
++                srcpixel = (WORD *)srcrow;
 +                dstpixel= (float *)dstrow;
 +                for (x = 0; x < prc->Width; x++)
 +                {
-+                    dstpixel[0] = *srcpixel++ / 65535.0f;
-+                    dstpixel[1] = *srcpixel++ / 65535.0f;
-+                    dstpixel[3] = *srcpixel++ / 65535.0f;
-+                    dstpixel[3] = *srcpixel++ / 65535.0f;
++                    float alpha = srcpixel[3];
++                    if (alpha != 0 && alpha != 255)
++                    {
++                        *dstpixel++ = from_sRGB_component(srcpixel[0] / alpha);
++                        *dstpixel++ = from_sRGB_component(srcpixel[1] / alpha);
++                        *dstpixel++ = from_sRGB_component(srcpixel[2] / alpha);
++                    }
++                    else
++                    {
++                        *dstpixel++ = from_sRGB_component(srcpixel[0] / 65535.0f);
++                        *dstpixel++ = from_sRGB_component(srcpixel[1] / 65535.0f);
++                        *dstpixel++ = from_sRGB_component(srcpixel[2] / 65535.0f);
++                    }
++                    *dstpixel++ = alpha / 65535.0f;
 +
-+                    dstpixel += 4;
++                    srcpixel += 4;
 +                }
 +                srcrow += srcstride;
 +                dstrow += cbStride;
@@ -121,10 +120,47 @@ index 1783e0eb7ac..77f4dedcd55 100644
 +    }
 +}
 +
- static HRESULT copypixels_to_128bppRGBFloat(struct FormatConverter *This, const WICRect *prc,
-     UINT cbStride, UINT cbBufferSize, BYTE *pbBuffer, enum pixelformat source_format)
- {
-@@ -2574,12 +2682,12 @@ static const struct pixelformatinfo supported_formats[] = {
++static HRESULT copypixels_to_128bppPRGBAFloat(struct FormatConverter *This, const WICRect *prc,
++    UINT cbStride, UINT cbBufferSize, BYTE *pbBuffer, enum pixelformat source_format)
++{
++    HRESULT hr;
++
++    switch (source_format)
++    {
++    case format_128bppPRGBAFloat:
++        if (prc)
++            return IWICBitmapSource_CopyPixels(This->source, prc, cbStride, cbBufferSize, pbBuffer);
++        return S_OK;
++    case format_64bppPRGBA:
++    {
++        hr = copypixels_to_128bppRGBAFloat(This, prc, cbStride, cbBufferSize, pbBuffer, source_format);
++        if (SUCCEEDED(hr) && prc)
++        {
++            float *dstrow;
++            INT x, y;
++
++            for (y=0; y<prc->Height; y++)
++            {
++                dstrow = (float *)&pbBuffer[cbStride*y];
++                for (x=0; x<prc->Width; x++)
++                {
++                    float alpha = dstrow[4*x+3];
++
++                    if (alpha != 65535)
++                    {
++                        dstrow[4*x] = dstrow[4*x] * alpha;
++                        dstrow[4*x+1] = dstrow[4*x+1] * alpha;
++                        dstrow[4*x+2] = dstrow[4*x+2] * alpha;
++                    }
++                }
++            }
++        }
++        return hr;
++    }
+     default:
+         FIXME("Unimplemented conversion path %d.\n", source_format);
+         return WINCODEC_ERR_UNSUPPORTEDOPERATION;
+@@ -2574,12 +2718,12 @@ static const struct pixelformatinfo supported_formats[] = {
      {format_48bppBGR, &GUID_WICPixelFormat48bppBGR, NULL},
      {format_64bppRGB, &GUID_WICPixelFormat64bppRGB, NULL},
      {format_64bppBGRA, &GUID_WICPixelFormat64bppBGRA, NULL},
