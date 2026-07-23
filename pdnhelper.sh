@@ -145,6 +145,12 @@ cd build
 make install -j$(nproc)
 cd ..
 
+elif test $command == "maketest"; then # command
+
+cd build
+make test -j$(nproc)
+cd ..
+
 elif test "$command" == "createprefix"; then # command
 
 # This does the initial prefix creation and sets it to windows 10

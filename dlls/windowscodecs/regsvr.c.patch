@@ -1,0 +1,35 @@
+diff --git a/dlls/windowscodecs/regsvr.c b/dlls/windowscodecs/regsvr.c
+index d6c430e22ad..3f38091d417 100644
+--- a/dlls/windowscodecs/regsvr.c
++++ b/dlls/windowscodecs/regsvr.c
+@@ -1684,10 +1684,12 @@ static GUID const * const converter_formats[] = {
+     &GUID_WICPixelFormat48bppRGB,
+     &GUID_WICPixelFormat48bppRGBHalf,
+     &GUID_WICPixelFormat64bppRGBA,
++    &GUID_WICPixelFormat64bppPRGBA,
+     &GUID_WICPixelFormat32bppCMYK,
+     &GUID_WICPixelFormat96bppRGBFloat,
+     &GUID_WICPixelFormat128bppRGBFloat,
+     &GUID_WICPixelFormat128bppRGBAFloat,
++    &GUID_WICPixelFormat128bppPRGBAFloat,
+     NULL
+ };
+ 
+@@ -2454,6 +2456,17 @@ static struct regsvr_pixelformat const pixelformat_list[] = {
+         WICPixelFormatNumericRepresentationUnsignedInteger,
+         1
+     },
++    {   &GUID_WICPixelFormat64bppPRGBAHalf,
++        "The Wine Project",
++        "64bpp PRGBAHalf",
++        NULL, /* no version */
++        &GUID_VendorMicrosoft,
++        64, /* bitsperpixel */
++        4, /* channel count */
++        channel_masks_16bit,
++        WICPixelFormatNumericRepresentationFloat,
++        1
++    },
+     {   &GUID_WICPixelFormat32bppCMYK,
+         "The Wine Project",
+         "32bpp CMYK",
