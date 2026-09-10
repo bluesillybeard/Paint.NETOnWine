@@ -1,8 +1,8 @@
 diff --git a/dlls/d2d1/command_list.c b/dlls/d2d1/command_list.c
-index 34242ddd88a..305f1c56abf 100644
+index 6c830d2660e..629ea8ebcd2 100644
 --- a/dlls/d2d1/command_list.c
 +++ b/dlls/d2d1/command_list.c
-@@ -474,8 +474,8 @@ static HRESULT STDMETHODCALLTYPE d2d_command_list_Close(ID2D1CommandList *iface)
+@@ -504,8 +504,8 @@ static HRESULT STDMETHODCALLTYPE d2d_command_list_Close(ID2D1CommandList *iface)
  
      FIXME("iface %p stub.\n", iface);
  
@@ -13,9 +13,9 @@ index 34242ddd88a..305f1c56abf 100644
  
      command_list->state = D2D_COMMAND_LIST_STATE_CLOSED;
  
-@@ -1098,3 +1098,142 @@ void d2d_command_list_fill_opacity_mask(struct d2d_command_list *command_list, c
-     d2d_command_list_write_field(&data, &command->dst_rect, dst_rect, sizeof(*dst_rect));
-     d2d_command_list_write_field(&data, &command->src_rect, src_rect, sizeof(*src_rect));
+@@ -1177,3 +1177,142 @@ void d2d_command_list_fill_opacity_mask(struct d2d_command_list *command_list, c
+         d2d_command_list_write_field(&data, &command->src_rect, src_rect, sizeof(*src_rect));
+     }
  }
 +
 +void d2d_command_list_draw_command(const struct d2d_command *command, struct d2d_device_context *context) {

@@ -1,8 +1,8 @@
 diff --git a/dlls/dwrite/font.c b/dlls/dwrite/font.c
-index f207bade10e..8bb937a07a0 100644
+index 9544784b8cc..71fcf8b231c 100644
 --- a/dlls/dwrite/font.c
 +++ b/dlls/dwrite/font.c
-@@ -5831,6 +5831,29 @@ static ULONG WINAPI glyphrunanalysis_Release(IDWriteGlyphRunAnalysis *iface)
+@@ -5828,6 +5828,29 @@ static ULONG WINAPI glyphrunanalysis_Release(IDWriteGlyphRunAnalysis *iface)
      return refcount;
  }
  
@@ -32,7 +32,7 @@ index f207bade10e..8bb937a07a0 100644
  static void glyphrunanalysis_get_texturebounds(struct dwrite_glyphrunanalysis *analysis, RECT *bounds)
  {
      struct dwrite_glyphbitmap glyph_bitmap;
-@@ -5862,7 +5885,7 @@ static void glyphrunanalysis_get_texturebounds(struct dwrite_glyphrunanalysis *a
+@@ -5859,7 +5882,7 @@ static void glyphrunanalysis_get_texturebounds(struct dwrite_glyphrunanalysis *a
          if (bitmap_size > analysis->max_glyph_bitmap_size)
              analysis->max_glyph_bitmap_size = bitmap_size;
  

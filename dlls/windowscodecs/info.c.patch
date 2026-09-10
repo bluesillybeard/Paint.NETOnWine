@@ -1,8 +1,8 @@
 diff --git a/dlls/windowscodecs/info.c b/dlls/windowscodecs/info.c
-index 4063196e27c..b869f15c6d7 100644
+index 4063196e27c..3722a8f7eff 100644
 --- a/dlls/windowscodecs/info.c
 +++ b/dlls/windowscodecs/info.c
-@@ -1331,11 +1331,107 @@ static HRESULT WINAPI PixelFormatInfo_GetFormatGUID(IWICPixelFormatInfo2 *iface,
+@@ -1331,10 +1331,132 @@ static HRESULT WINAPI PixelFormatInfo_GetFormatGUID(IWICPixelFormatInfo2 *iface,
      return S_OK;
  }
  
@@ -90,24 +90,49 @@ index 4063196e27c..b869f15c6d7 100644
  static HRESULT WINAPI PixelFormatInfo_GetColorContext(IWICPixelFormatInfo2 *iface,
      IWICColorContext **ppIColorContext)
  {
+-    FIXME("(%p,%p): stub\n", iface, ppIColorContext);
 +    HRESULT hr;
 +    IWICPixelFormatInfo *iface1;
-+    UINT bpp;
-+    UINT channel;
++    GUID formatuuid;
++    WICPixelFormatNumericRepresentation repr;
 +
-     FIXME("(%p,%p): stub\n", iface, ppIColorContext);
--    return E_NOTIMPL;
++    TRACE("(%p,%p)\n", iface, ppIColorContext);
 +
-+    if(FAILED(hr = IWICPixelFormatInfo2_QueryInterface(iface, &IID_IWICPixelFormatInfo, (void **)&iface1)))
++    if (FAILED(hr = IWICPixelFormatInfo2_GetNumericRepresentation(iface, &repr)))
++        return hr;
++    if (FAILED(hr = IWICPixelFormatInfo2_QueryInterface(iface, &IID_IWICPixelFormatInfo, (void **)&iface1)))
++        return hr;
++    if (FAILED(hr = IWICPixelFormatInfo_GetFormatGUID(iface1, &formatuuid)))
 +        return hr;
 +
-+    IWICPixelFormatInfo_GetBitsPerPixel(iface1, &bpp);
-+    IWICPixelFormatInfo_GetChannelCount(iface1, &channel);
++    // "Alpha8 returns null" aparently
++    if ((IsEqualGUID(&GUID_WICPixelFormat8bppAlpha, &formatuuid)))
++    {
++        *ppIColorContext = NULL;
++        return S_OK;
++    }
 +
 +    ColorContext_Create(ppIColorContext);
-+    if(bpp/channel < 16)
++    // we need to determine if in one of the special case
++    if (IsEqualGUID(&GUID_WICPixelFormat32bppCMYK, &formatuuid) ||
++        IsEqualGUID(&GUID_WICPixelFormat64bppCMYK, &formatuuid) ||
++        IsEqualGUID(&GUID_WICPixelFormat40bppCMYKAlpha, &formatuuid) ||
++        IsEqualGUID(&GUID_WICPixelFormat80bppCMYKAlpha, &formatuuid))
++    {
++        FIXME("CMYK profile is not yet implemented\n");
++        return E_NOTIMPL;
++    }
++
++    if (repr == WICPixelFormatNumericRepresentationIndexed ||
++        repr == WICPixelFormatNumericRepresentationUnsignedInteger ||
++        repr == WICPixelFormatNumericRepresentationSignedInteger)
 +        return IWICColorContext_InitializeFromMemory(*ppIColorContext, SRGB_ICC_COLOR_PROFILE, sizeof(SRGB_ICC_COLOR_PROFILE));
-+    return IWICColorContext_InitializeFromMemory(*ppIColorContext, SCRGB_ICC_COLOR_PROFILE, sizeof(SCRGB_ICC_COLOR_PROFILE));
++    else if (repr == WICPixelFormatNumericRepresentationFixed ||
++        WICPixelFormatNumericRepresentationFloat)
++        return IWICColorContext_InitializeFromMemory(*ppIColorContext, SCRGB_ICC_COLOR_PROFILE, sizeof(SCRGB_ICC_COLOR_PROFILE));
++
++    FIXME("Unkown color context for file format %u\n", repr);
++    *ppIColorContext = NULL;
+     return E_NOTIMPL;
  }
  
- static HRESULT WINAPI PixelFormatInfo_GetBitsPerPixel(IWICPixelFormatInfo2 *iface,
